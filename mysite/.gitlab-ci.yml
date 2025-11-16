@@ -3,21 +3,39 @@ image: python:3.11
 stages:
   - test
 
+# Кэширование pip пакетов для ускорения
+cache:
+  paths:
+    - .cache/pip
+
 before_script:
   - python -V
   - pip install -r requirements.txt
 
-test_django:
+code_validation:
   stage: test
   script:
-    - echo "🔍 Проверка Django..."
+    - echo "🔍 Проверка кода Django..."
     - python manage.py check
-    - echo "✅ Django проверка прошла!"
-    
-    - echo "🧪 Запуск тестов..."
+    - echo "✅ Код валиден!"
+
+test_suite:
+  stage: test
+  script:
+    - echo "🧪 Запуск тестовой базы..."
     - python manage.py test
     - echo "✅ Тесты прошли!"
-    
+
+migration_check:
+  stage: test
+  script:
     - echo "📦 Проверка миграций..."
     - python manage.py makemigrations --check --dry-run
     - echo "✅ Миграции в порядке!"
+
+security_check:
+  stage: test
+  script:
+    - echo "🔒 Базовая проверка безопасности..."
+    - python manage.py check --deploy
+    - echo "✅ Безопасность проверена!"

@@ -18,8 +18,12 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Безопасность
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
+if 'SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ['SECRET_KEY']
+else:
+    SECRET_KEY = 'development-secret-key'  # Только для разработки
+
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
