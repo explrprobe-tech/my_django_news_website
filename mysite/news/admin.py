@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group, User
+
 
 from .models import News, Category
 
@@ -15,6 +17,10 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
+
+    def has_permission(self, request):
+        return request.user.is_active and request.user.groups.filter(name='Администраторы').exists()
+
 
 admin.site.register(News, NewsAdmin)
 admin.site.register(Category, CategoryAdmin)

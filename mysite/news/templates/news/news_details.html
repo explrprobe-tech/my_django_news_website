@@ -1,0 +1,31 @@
+{% extends "news/base.html" %}
+
+{% block title %}{{ news_item.title }} - Новостной сайт{% endblock %}
+
+{% block content %}
+<article class="news-detail-container">
+    <!-- Основной контент новости -->
+    <div class="news-detail-content">
+        <h1 class="news-detail-title">{{ news_item.title }}</h1>
+        
+        <!-- Мета-информация (дата, категория, просмотры) -->
+        <div class="news-detail-meta">
+            <span class="meta-item">📅 {{ news_item.created_at|date:"d.m.Y H:i" }}</span>
+            {% if news_item.category %}
+                <a href="{% url 'category' news_item.category.pk %}" class="category-badge">{{ news_item.category.name }}</a>
+            {% endif %}
+            <span class="meta-item">👁️ {{ news_item.views }} просмотров</span>
+        </div>
+        
+        <!-- Содержание новости -->
+        <div class="news-detail-text">
+            {{ news_item.content|linebreaks }}
+        </div>
+        
+        <!-- Кнопка возврата -->
+        <div class="news-detail-actions">
+            <a href="{% url 'news_list' %}" class="back-button">← Назад к списку новостей</a>
+        </div>
+    </div>
+</article>
+{% endblock %}

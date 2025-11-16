@@ -1,0 +1,38 @@
+{% extends "news/base.html" %}
+
+{% block title %}Вход - Новостной сайт{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-form">
+        <h2>🔐 Вход в систему</h2>
+        
+        {% if form.errors %}
+            <div class="alert alert-error">
+                Неверное имя пользователя или пароль. Попробуйте снова.
+            </div>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">Имя пользователя:</label>
+                <input type="text" name="username" id="id_username" class="form-control" placeholder="Введите имя пользователя">
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password">Пароль:</label>
+                <input type="password" name="password" id="id_password" class="form-control" placeholder="Введите пароль">
+            </div>
+            
+            <button type="submit" class="auth-btn">Войти</button>
+        </form>
+        
+        <div class="auth-links">
+            <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь здесь</a></p>
+            <a href="{% url 'home' %}" class="back-link">← На главную</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

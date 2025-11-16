@@ -1,0 +1,33 @@
+{% extends "news/base.html" %}
+
+{% block title %}Редактировать новость - {{ news_item.title }}{% endblock %}
+
+{% block content %}
+<div class="edit-news-container">
+    <h1>✏️ Редактировать новость</h1>
+    
+    <form method="post" class="news-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}">Заголовок:</label>
+            {{ form.title }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}">Содержание:</label>
+            {{ form.content }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.category.id_for_label }}">Категория:</label>
+            {{ form.category }}
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn-save">💾 Сохранить изменения</button>
+            <a href="{% url 'view_news' news_item.pk %}" class="btn-cancel">❌ Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

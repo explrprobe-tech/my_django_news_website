@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Мой сайт{% endblock %}</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .nav { margin-bottom: 20px; padding: 10px; background: #f0f0f0; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        {% if user.is_authenticated %}
+            Привет, {{ user.username }}! 
+            <a href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+            <a href="{% url 'login' %}">Войти</a>
+        {% endif %}
+    </div>
+    
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

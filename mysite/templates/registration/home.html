@@ -1,0 +1,12 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+<h1>Добро пожаловать на мой сайт!</h1>
+
+{% if user.is_authenticated %}
+    <p>Вы успешно вошли в систему!</p>
+    <p>Теперь вы можете защищать свои страницы.</p>
+{% else %}
+    <p>Пожалуйста, войдите в систему.</p>
+{% endif %}
+{% endblock %}
