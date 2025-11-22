@@ -1,0 +1,58 @@
+name: Django CI/CD
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  SECRET_KEY: 'django-insecure-test-key-for-ci-12345'
+  DEBUG: 'False'
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,github.com'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: 🔧 Validate Django
+      run: |
+        echo "🔍 Проверяем Django..."
+        python manage.py check
+        echo "✅ Django валидация пройдена!"
+        
+    - name: 🧪 Run tests
+      run: |
+        echo "🧪 Запускаем тесты..."
+        python manage.py test
+        echo "✅ Тесты завершены!"
+        
+    - name: 📋 Check migrations
+      run: |
+        echo "📊 Проверяем миграции..."
+        python manage.py makemigrations --check --dry-run
+        echo "✅ Миграции проверены!"
+        
+    - name: 📈 Test coverage (опционально)
+      run: |
+        pip install coverage
+        coverage run --source='.' manage.py test
+        coverage report
