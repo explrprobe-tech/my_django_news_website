@@ -40,14 +40,14 @@ jobs:
         python mysite/manage.py check
         echo "✅ Django валидация пройдена!"
         
-    - name: 🧪 Run tests
-      run: |
-        echo "🧪 Запускаем тесты..."
-        python mysite/manage.py test --parallel
-        echo "✅ Тесты завершены!"
-        
     - name: 📋 Check migrations
       run: |
         echo "📊 Проверяем миграции..."
         python mysite/manage.py makemigrations --check --dry-run
         echo "✅ Миграции проверены!"
+        
+    - name: 🧪 Run tests
+      run: |
+        echo "🧪 Запускаем тесты..."
+        python mysite/manage.py test --parallel
+        echo "✅ Тесты завершены!"
