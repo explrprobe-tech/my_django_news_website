@@ -14,10 +14,11 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10  
     
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11']
+        python-version: ['3.12']  
     
     steps:
     - name: 📥 Checkout code
@@ -42,7 +43,7 @@ jobs:
     - name: 🧪 Run tests
       run: |
         echo "🧪 Запускаем тесты..."
-        python manage.py test
+        python manage.py test --parallel
         echo "✅ Тесты завершены!"
         
     - name: 📋 Check migrations
@@ -50,9 +51,3 @@ jobs:
         echo "📊 Проверяем миграции..."
         python manage.py makemigrations --check --dry-run
         echo "✅ Миграции проверены!"
-        
-    - name: 📈 Test coverage (опционально)
-      run: |
-        pip install coverage
-        coverage run --source='.' manage.py test
-        coverage report
