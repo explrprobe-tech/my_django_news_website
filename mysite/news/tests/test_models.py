@@ -6,7 +6,7 @@ class NewsModelTest(TestCase):
     
     def test_news_creation(self):
         # 1. Create Category and News for this category
-        category = Category.objects.create(name="Technology")
+        category = Category.objects.create(title="Technology")
         news = News.objects.create(
             title="First test news",
             content="Test content for first news",
@@ -15,7 +15,8 @@ class NewsModelTest(TestCase):
         
         # 2. Check that category and news were created correct
         self.assertEqual(news.title, "First test news")
-        self.assertEqual(news.category, "Technology")
+        self.assertEqual(category.title, "Technology")
+        self.assertEqual(news.category.title, "Technology")
     
     def test_news_str_method(self):
         """Тест: правильно ли отображается новость?"""
