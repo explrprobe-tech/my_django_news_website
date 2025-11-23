@@ -37,7 +37,7 @@ jobs:
     - name: 🔧 Validate Django
       run: |
         echo "🔍 Проверяем Django..."
-        python manage.py check
+        python mysite/manage.py check
         echo "✅ Django валидация пройдена!"
         
     - name: 🧪 Run tests
