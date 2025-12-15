@@ -139,3 +139,22 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+import sys
+
+if 'test' in sys.argv:
+    DEBUG = True
+
+    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+    MIDDLEWARE = [
+        mv for mv in MIDDLEWARE
+        if 'whitenoise' not in mv and 'security' not in mv
+    ]
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'name': ':memory:'
+        }
+    }

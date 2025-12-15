@@ -49,5 +49,5 @@ jobs:
     - name: 🧪 Run tests
       run: |
         echo "🧪 Запускаем тесты..."
-        python mysite/manage.py test news --parallel=auto --verbosity=2
+        python mysite/manage.py test news --parallel=auto --verbosity=3 --noinput --failfast
         echo "✅ Тесты завершены!"
