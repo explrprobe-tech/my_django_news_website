@@ -33,18 +33,43 @@ class NewsViewsTest(TestCase):
                                         password='testpass123')
         self.category = Category.objects.create(title="Science")
 
+        self.title_published = "Published News"
+        self.content_published = "Content for the First news"
+        
+        self.title_unpublished = "Unpublished News"
+        self.content_unpublished = "Content for the Second news"
+
         self.news_published = News.objects.create(
-            title = "Published News",
-            content = "Content for the First news",
+            title = self.title_published,
+            content = self.content_published,
             category = self.category,
             is_published = True
         )
         self.news_unpublished = News.objects.create(
-            title = "UnPublished News",
-            content = "Content for the Second news",
+            title = self.title_unpublished,
+            content = self.content_unpublished,
             category = self.category,
             is_published = False
         )
+
+    def test_news_creation(self):
+        """Test: news were created properly"""
+        self.assertEqual(self.news_published.title, self.title_published, "Published News should have title.")
+        self.assertEqual(self.news_published.content, self.content_published, "Published News should have content.")
+
+        self.assertEqual(self.news_unpublished.title, self.title_unpublished, "Unpublished News should have title.")
+        self.assertEqual(self.news_unpublished.content, self.content_unpublished, "Unpublished News should have content.")
+
+    def test_news_str_method(self):
+        """Test: news displays properly"""
+
+        self.assertEqual(str(self.news_published), self.news_published.title)
+        self.assertEqual(str(self.news_unpublished), self.news_unpublished.title)
+
+    def test_category_str_method(self):
+        """Test: category displays properly"""
+
+        self.assertEqual(str(self.category), self.category.title)
 
     def test_home_news_page_status_code(self):
         """Тест: главная страница загружается"""
