@@ -52,8 +52,14 @@ class NewsViewsTest(TestCase):
             is_published = False
         )
 
+    def test_news_belongs_to_category(self):
+        """Test: news belongs to category"""
+        self.assertIn(self.news_published, self.category.news_set.all(), 'Published News doesnt belong to category')
+        self.assertIn(self.news_unpublished, self.category.news_set.all(), 'Unpublished News doesnt belong to category')
+
     def test_news_creation(self):
         """Test: news were created properly"""
+
         self.assertEqual(self.news_published.title, self.title_published, "Published News should have title.")
         self.assertEqual(self.news_published.content, self.content_published, "Published News should have content.")
 
