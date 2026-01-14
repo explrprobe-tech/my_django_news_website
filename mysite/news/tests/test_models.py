@@ -72,6 +72,17 @@ class NewsViewsTest(TestCase):
         self.assertEqual(str(self.news_published), self.news_published.title)
         self.assertEqual(str(self.news_unpublished), self.news_unpublished.title)
 
+    def test_news_get_absolute_url(self):  #to do here understand how to check that get_absolute_url() return correct
+        """Test: news can return absolute url"""
+
+        published_url = self.news_published.get_absolute_url()
+
+        self.assertTrue(published_url.startswith('/'), 'Published news url should start with /')
+
+        expected_url = reverse('view_news', kwargs={'pk': self.news_published.pk})
+
+        self.assertEqual(published_url, expected_url, 'Published news url does not match expected url')
+
     def test_category_str_method(self):
         """Test: category displays properly"""
 
