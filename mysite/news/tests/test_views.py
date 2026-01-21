@@ -43,7 +43,13 @@ class NewsViewsTest(TestCase):
         """Тест: главная страница использует правильный шаблон"""
         response = self.client.get(reverse('news_list'))
         self.assertTemplateUsed(response, 'news/home_news_list.html')
-    def test_news_detail_views_published(self): #todo
+    def test_news_detail_views_published(self):
         """Test: News can be taken"""
         response_news_published = self.client.get(self.news_published.get_absolute_url())
         self.assertEqual(response_news_published.status_code, 200, 'Published news status code should be 200')
+        self.assertTemplateUsed(response_news_published, 'news/news_details.html')
+        self.assertEqual(response_news_published.context['news_item'], self.news_published)
+    def test_news_detail_views_unpublished(self):
+        """Test: unpablished news can not be taken"""
+        response_news_unpublished = self.client.get(self.news_unpublished)
+        self.assertEqual(response_news_unpublished.status_code, 404, 'Unpublished news can be opened')
