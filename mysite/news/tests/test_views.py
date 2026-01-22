@@ -53,3 +53,10 @@ class NewsViewsTest(TestCase):
         """Test: unpablished news can not be taken"""
         response_news_unpublished = self.client.get(self.news_unpublished)
         self.assertEqual(response_news_unpublished.status_code, 404, 'Unpublished news can be opened')
+    def test_news_by_category(self):
+        """Test: category returns news"""
+        response_category = self.client.get(self.category.get_absolute_url())
+        self.assertEqual(response_category.status_code, 200, "Category can not be opened")
+        self.assertTemplateUsed(response_category, 'news/home_news_list.html')
+    def test_news_by_category_shows_only_published(self):
+        pass
