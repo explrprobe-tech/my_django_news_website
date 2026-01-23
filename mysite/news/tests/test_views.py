@@ -59,4 +59,8 @@ class NewsViewsTest(TestCase):
         self.assertEqual(response_category.status_code, 200, "Category can not be opened")
         self.assertTemplateUsed(response_category, 'news/home_news_list.html')
     def test_news_by_category_shows_only_published(self):
-        pass
+        """Test: category show only published news"""
+        response_category = self.client.get(self.category.get_absolute_url())
+        category_news = response_category.context['news']
+        self.assertIn(self.news_published, category_news, 'Published news is not in category')
+        self.assertNotIn(self.news_unpublished, category_news, 'Unublished news is in category')
