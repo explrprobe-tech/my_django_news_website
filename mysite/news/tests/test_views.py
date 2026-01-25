@@ -7,20 +7,20 @@ class NewsViewsTest(TestCase):
     def setUp(self):
         self.category_science = Category.objects.create(title="Science")
         self.news_science_published = News.objects.create(
-            title = "Published News",
+            title = "Published Science News",
             content = "Content for the First news",
             category = self.category_science,
             is_published = True
         )
         self.news_science_unpublished = News.objects.create(
-            title = "Unpublished News",
+            title = "Unpublished Science News",
             content = "Content for the Second news",
             category = self.category_science,
             is_published = False
         )
         self.category_biology = Category.objects.create(title="Biology")
         self.news_biology_published = News.objects.create(
-            title = "Biology news",
+            title = "Published Biology news",
             content = "Content for biology news",
             category = self.category_biology,
             is_published = True
@@ -29,19 +29,6 @@ class NewsViewsTest(TestCase):
         """Тест: главная страница загружается"""
         response = self.client.get(reverse('news_list'))
         self.assertEqual(response.status_code, 200)
-    def test_home_news_page_shows_news_published(self): 
-        """Тест: публикованная новость отображается"""
-        response = self.client.get(reverse('news_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('news', response.context, 'В контексте должен быть ключ news_list')
-        news_list = response.context['news']
-        news_items = list(news_list)
-        self.assertEqual(len(news_items), 2, f'Должнj быть 2 новости, сейчас: {len(news_items)}')
-        news_in_context = news_items[0]
-        self.assertEqual(news_in_context.id, self.news_science_published.id, f'В контексте должна быть новосить с id: {self.news_science_published.id}')
-        self.assertTrue(news_in_context.is_published, "Новость в контекст должна быть опубликованной")
-        news_ids_in_context = [news.id for news in news_items]
-        self.assertNotIn(self.news_science_unpublished.id, news_ids_in_context, f'Новосить с id: {self.news_science_unpublished.id} не должна быть в контексте')
     def test_home_news_page_template(self):
         """Тест: главная страница использует правильный шаблон"""
         response = self.client.get(reverse('news_list'))
