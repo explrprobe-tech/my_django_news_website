@@ -41,4 +41,12 @@ class NewsFormTest(TestCase):
             self.assertNotIn(field, form.errors, f'Form does show error for not required field - {field}')
     def test_news_form_invalid_data(self):
         "Test: form validation with invalid data"
-        pass
+        form_data_invalid = {
+            'title': '123 Invalid title',
+            'content': 'Content for invalid form',
+            'category': self.category_biology.id,
+            'is_published': True
+        }
+        news_invalid = NewsForm(data=form_data_invalid)
+        self.assertFalse(news_invalid.is_valid(), 'News object by invalid form should be invalid')
+        self.assertIn('title', news_invalid.errors, 'Title with start by number should be invalid')
