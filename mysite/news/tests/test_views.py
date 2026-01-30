@@ -55,3 +55,8 @@ class NewsViewsTest(TestCase):
         self.assertIn(self.news_science_published, category_news, 'Published news is not in category science')
         self.assertNotIn(self.news_science_unpublished, category_news, 'Unublished news is in category science')
         self.assertNotIn(self.news_biology_published, category_news, 'Biology news is in category science')
+    def test_register_view_get(self):
+        pass
+    def test_register_view_post(self):
+        pass
+    

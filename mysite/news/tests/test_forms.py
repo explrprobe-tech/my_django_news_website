@@ -13,7 +13,7 @@ class NewsFormTest(TestCase):
             'category': self.category_science.id,
             'is_published': True
         }
-    def test_valid_news_form(self):
+    def test_news_form_valid(self):
         "Test: form works with valid data"
         form =  NewsForm(data=self.form_data)
         self.assertTrue(form.is_valid(), 'Form is not valid')
@@ -50,3 +50,10 @@ class NewsFormTest(TestCase):
         news_invalid = NewsForm(data=form_data_invalid)
         self.assertFalse(news_invalid.is_valid(), 'News object by invalid form should be invalid')
         self.assertIn('title', news_invalid.errors, 'Title with start by number should be invalid')
+    def test_register_form_valid(self):
+        "Test: register form works with valid data"
+        pass
+    def test_register_form_missing_required_fields(self):
+        pass
+    def test_register_form_invalid_data(self):
+        pass
