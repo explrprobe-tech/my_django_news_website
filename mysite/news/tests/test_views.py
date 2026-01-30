@@ -56,7 +56,19 @@ class NewsViewsTest(TestCase):
         self.assertNotIn(self.news_science_unpublished, category_news, 'Unublished news is in category science')
         self.assertNotIn(self.news_biology_published, category_news, 'Biology news is in category science')
     def test_register_view_get(self):
-        pass
+        response = self.client.get(reverse('register'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'news/register.html')
     def test_register_view_post(self):
-        pass
-    
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        body_reg = {
+            'username': 'test_user',
+            'email': 'test_user_email@mail.ru',
+            'password1': 'ComplexPass123!',
+            'password2': 'ComplexPass123!'
+        }
+        response = self.client.post(reverse('register'), body_reg)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/', 'After succesfull registration should be redirect to /')
+        self.assertTrue(User.objects.filter(username='test_user').exists(), 'User was not created')
