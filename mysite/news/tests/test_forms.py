@@ -1,6 +1,6 @@
 from django.test import TestCase
 from news.models import News, Category
-from news.forms import NewsForm
+from news.forms import NewsForm, RegisterForm
 
 class NewsFormTest(TestCase):
     "Tests for forms in app News"
@@ -52,7 +52,19 @@ class NewsFormTest(TestCase):
         self.assertIn('title', news_invalid.errors, 'Title with start by number should be invalid')
     def test_register_form_valid(self):
         "Test: register form works with valid data"
-        pass
+        form_data = {
+            'username': 'Test_user_form',
+            'email': 'Test_user_form@mail.ru',
+            'password1': 'Coplexpassword123!',
+            'password2': 'Coplexpassword123!'
+        }
+        register = RegisterForm(data=form_data)
+        self.assertTrue(register.is_valid(), f'Register form should be valid. Error: {register.errors if not register.is_valid() else None}')
+        user_test = register.save()
+        self.assertEqual(user_test.username, 'Test_user_form')
+        self.assertEqual(user_test.email, 'Test_user_form@mail.ru')
+        self.assertTrue(user_test.check_password('Coplexpassword123!'), 'user test password should match')
+        self.assertTrue(user_test.is_active, 'user test should be active')
     def test_register_form_missing_required_fields(self):
         pass
     def test_register_form_invalid_data(self):
