@@ -2,8 +2,15 @@ from tkinter.tix import Tree
 from unicodedata import category
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User, Group
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-# Create your models here.
+@receiver(post_save, sender=User)
+def add_user_to_default_group(sender, instance, created, **kwargs):
+    if created:
+        defaul_group, _ = Group.objects.get_or_create(name='Обычные пользователи')
+        instance.groups.add(defaul_group)
 
 class News(models.Model):
     title = models.CharField(max_length=150, verbose_name='Title')
