@@ -3,6 +3,7 @@ from .models import News
 import re
 
 from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -36,3 +37,13 @@ class RegisterForm(UserCreationForm):
 
         self.fields['username'].help_text = 'Только буквы, цифры и @/./+/-/_'
         self.fields['password1'].help_text = 'Пароль должен быть не менее 8 символов'
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+
+        try:
+            validate_password(password=password1)
+        except ValidationError as e:
+            self.add_error('password1', e)
+        
+        return password1

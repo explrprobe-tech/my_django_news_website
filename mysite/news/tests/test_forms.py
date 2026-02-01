@@ -75,4 +75,16 @@ class NewsFormTest(TestCase):
             self.assertFalse(register_valid.is_valid(), f'{field} should be required')
             self.assertIn(field, register_valid.errors, f'Register form does not show error for {field}')
     def test_register_form_invalid_data(self):
-        pass
+        "Test: Register form doesn't work with invalid data"
+        register_form_data_invalid = {
+            'username': 'test_user_invalid_name$',
+            'email': 'invalid_mail.ru',
+            'password1': 'short',
+            'password2': 'does not match password1'
+        }
+        register_form_invalid = RegisterForm(data=register_form_data_invalid)
+        self.assertFalse(register_form_invalid.is_valid())
+        self.assertIn('username', register_form_invalid.errors, 'Register form does not check username $')
+        self.assertIn('email', register_form_invalid.errors, 'Register form does not check email pattern')
+        self.assertIn('password1', register_form_invalid.errors, 'Register form does not check password1 short')
+        self.assertIn('password2', register_form_invalid.errors, 'Register form does not check password2 matching to password1')
