@@ -98,13 +98,17 @@ class ViewNews(DetailView):
     context_object_name = 'news_item'
     template_name = 'news/news_details.html'
     
-class CreateNews(LoginRequiredMixin, CreateView):
+class CreateNews(LoginRequiredMixin, CreateView, UserPassesTestMixin):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     login_url = 'accounts/login'
 
     def test_func(self):
         return is_editor_or_admin(self.request.user)
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 class EditNews(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = News

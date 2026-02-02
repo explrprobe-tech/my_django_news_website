@@ -1,6 +1,19 @@
 from django.test import TestCase
 from news.models import News, Category
 from django.urls import reverse
+from django.contrib.auth.models import User, Group
+
+
+def create_editor_user(username='editor', password='EditorPass123!'):
+    "Helper to create editor user"
+    user = User.objects.create_user(
+        username=username,
+        password=password,
+        email=f'{username}@example.ru'
+    )
+    editor_group, _ = Group.objects.get_or_create(name='Редакторы')
+    user.groups.add(editor_group)
+    return user, password
 
 class NewsViewsTest(TestCase):
     "Tests for views in app News"
@@ -55,6 +68,8 @@ class NewsViewsTest(TestCase):
         self.assertIn(self.news_science_published, category_news, 'Published news is not in category science')
         self.assertNotIn(self.news_science_unpublished, category_news, 'Unublished news is in category science')
         self.assertNotIn(self.news_biology_published, category_news, 'Biology news is in category science')
+
+class RegisterViewTest(TestCase):
     def test_register_view_get(self):
         response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
@@ -72,3 +87,15 @@ class NewsViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/', 'After succesfull registration should be redirect to /')
         self.assertTrue(User.objects.filter(username='test_user').exists(), 'User was not created')
+
+class CreateNewsViewTest(TestCase):
+    def setUp(self):
+        self.editor_user, self.editor_password = create_editor_user()
+        self.client.login(username=self.editor_user.username, password=self.editor_password)
+    def test_create_news_view_get(self):
+        response = self.client.get(reverse('add_news'))
+        self.assertEqual(response.status_code, 200, 'Create news view are not reachable')
+        self.assertTemplateUsed(response, 'news/add_news.html', 'Create news view uses wrong template')
+    def test_create_news_view_post(self):
+        response = self.client.post(reverse('add_news'), data={})
+        self.assertEqual(response.status_code, 200, 'News was not created')
