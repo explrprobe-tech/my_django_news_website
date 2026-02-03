@@ -1,19 +1,7 @@
 from django.test import TestCase
 from news.models import News, Category
 from django.urls import reverse
-from django.contrib.auth.models import User, Group
-
-
-def create_editor_user(username='editor', password='EditorPass123!'):
-    "Helper to create editor user"
-    user = User.objects.create_user(
-        username=username,
-        password=password,
-        email=f'{username}@example.ru'
-    )
-    editor_group, _ = Group.objects.get_or_create(name='Редакторы')
-    user.groups.add(editor_group)
-    return user, password
+from news.tests.test_base import create_editor_user
 
 class NewsViewsTest(TestCase):
     "Tests for views in app News"
