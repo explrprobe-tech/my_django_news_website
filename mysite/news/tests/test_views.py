@@ -58,6 +58,7 @@ class NewsViewsTest(TestCase):
         self.assertNotIn(self.news_biology_published, category_news, 'Biology news is in category science')
 
 class RegisterViewTest(TestCase):
+    "Tests for view in app Register"
     def test_register_view_get(self):
         response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
@@ -77,6 +78,7 @@ class RegisterViewTest(TestCase):
         self.assertTrue(User.objects.filter(username='test_user').exists(), 'User was not created')
 
 class CreateNewsViewTest(TestCase):
+    "Tests for view in app Create"
     def setUp(self):
         self.editor_user, self.editor_password = create_editor_user()
         self.client.login(username=self.editor_user.username, password=self.editor_password)
