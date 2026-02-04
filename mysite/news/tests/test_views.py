@@ -77,7 +77,7 @@ class RegisterViewTest(TestCase):
         self.assertEqual(response.url, '/', 'After succesfull registration should be redirect to /')
         self.assertTrue(User.objects.filter(username='test_user').exists(), 'User was not created')
 
-class CreateNewsViewTest(TestCase):
+class CreateNewsViewTest(TestCase): #full refactoring
     "Tests for Create view in app News"
     def setUp(self):
         self.editor_user, self.editor_password = create_editor_user()

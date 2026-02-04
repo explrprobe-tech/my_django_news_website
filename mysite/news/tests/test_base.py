@@ -7,7 +7,7 @@ def admin_user(username='admin', password='AdminPass123!'):
         password=password,
         email=f'{username}@example.ru'
     )
-    admin_group, _ = Group.objects.get_or_create('Администраторы')
+    admin_group, _ = Group.objects.get_or_create(name='Администраторы')
     user.groups.add(admin_group)
     return user, password
 
