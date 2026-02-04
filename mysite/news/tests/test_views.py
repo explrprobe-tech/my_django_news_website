@@ -4,7 +4,7 @@ from django.urls import reverse
 from news.tests.test_base import create_editor_user
 
 class NewsViewsTest(TestCase):
-    "Tests for views in app News"
+    "Tests for News views in app News"
     def setUp(self):
         self.category_science = Category.objects.create(title="Science")
         self.news_science_published = News.objects.create(
@@ -58,7 +58,7 @@ class NewsViewsTest(TestCase):
         self.assertNotIn(self.news_biology_published, category_news, 'Biology news is in category science')
 
 class RegisterViewTest(TestCase):
-    "Tests for view in app Register"
+    "Tests for Register view in app News"
     def test_register_view_get(self):
         response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
@@ -78,7 +78,7 @@ class RegisterViewTest(TestCase):
         self.assertTrue(User.objects.filter(username='test_user').exists(), 'User was not created')
 
 class CreateNewsViewTest(TestCase):
-    "Tests for view in app Create"
+    "Tests for Create view in app News"
     def setUp(self):
         self.editor_user, self.editor_password = create_editor_user()
         self.client.login(username=self.editor_user.username, password=self.editor_password)

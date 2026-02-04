@@ -3,7 +3,7 @@ from news.models import News, Category
 from news.forms import NewsForm, RegisterForm
 
 class NewsFormTest(TestCase):
-    "Tests for forms in app News"
+    "Tests for News forms in app News"
     def setUp(self):
         self.category_science = Category.objects.create(title="Science")
         self.category_biology = Category.objects.create(title="Biology")
@@ -12,12 +12,6 @@ class NewsFormTest(TestCase):
             'content': 'Content for Science News',
             'category': self.category_science.id,
             'is_published': True
-        }
-        self.register_form_data = {
-            'username': 'Test_user_form',
-            'email': 'Test_user_form@mail.ru',
-            'password1': 'Coplexpassword123!',
-            'password2': 'Coplexpassword123!'
         }
     def test_news_form_valid(self):
         "Test: form works with valid data"
@@ -56,6 +50,16 @@ class NewsFormTest(TestCase):
         news_invalid = NewsForm(data=news_form_data_invalid)
         self.assertFalse(news_invalid.is_valid(), 'News object by invalid form should be invalid')
         self.assertIn('title', news_invalid.errors, 'Title with start by number should be invalid')
+    
+class RegisterFormTest(TestCase):
+    "Tests for Register form in app News"
+    def setUp(self):
+        self.register_form_data = {
+            'username': 'Test_user_form',
+            'email': 'Test_user_form@mail.ru',
+            'password1': 'Coplexpassword123!',
+            'password2': 'Coplexpassword123!'
+        }
     def test_register_form_valid(self):
         "Test: register form works with valid data"
         register = RegisterForm(data=self.register_form_data)
