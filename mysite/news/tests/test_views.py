@@ -77,15 +77,29 @@ class RegisterViewTest(TestCase):
         self.assertEqual(response.url, '/', 'After succesfull registration should be redirect to /')
         self.assertTrue(User.objects.filter(username='test_user').exists(), 'User was not created')
 
-class CreateNewsViewTest(TestCase): #full refactoring
+class CreateNewsViewTest(TestCase):
     "Tests for Create view in app News"
     def setUp(self):
+        self.category_science = Category.objects.create(title="Science")
         self.editor_user, self.editor_password = create_editor_user()
         self.client.login(username=self.editor_user.username, password=self.editor_password)
     def test_create_news_view_get(self):
         response = self.client.get(reverse('add_news'))
         self.assertEqual(response.status_code, 200, 'Create news view are not reachable')
         self.assertTemplateUsed(response, 'news/add_news.html', 'Create news view uses wrong template')
-    def test_create_news_view_post(self):
-        response = self.client.post(reverse('add_news'), data={})
-        self.assertEqual(response.status_code, 200, 'News was not created')
+        self.assertIn('form', response.context, 'Response context should have form')
+        form = response.context['form']
+        self.assertFalse(form.is_bound, 'Form should be unbound(empty) for creation')
+    def test_create_news_view_post_valid_data(self):
+        data = {
+            'title': 'Title for Test News',
+            'category': self.category_science.id,
+            'content': 'Content for Test News'
+        }
+        response_create_news = self.client.post(reverse('add_news'), data=data)
+        self.assertEqual(response_create_news.status_code, 302, 'News was not created') 
+        self.assertEqual(response_create_news.url, '/news/1/', 'Created News has wrong url')
+        response_get_news = self.client.get('/news/1/')
+        self.assertEqual(response_get_news.status_code, 200, 'Created News is unreachable')
+    def test_create_news_view_post_invalid_data(self):
+        pass #todo
