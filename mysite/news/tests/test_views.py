@@ -83,6 +83,11 @@ class CreateNewsViewTest(TestCase):
         self.category_science = Category.objects.create(title="Science")
         self.editor_user, self.editor_password = create_editor_user()
         self.client.login(username=self.editor_user.username, password=self.editor_password)
+        self.create_news_data = {
+            'title': 'Title for Test News',
+            'category': self.category_science.id,
+            'content': 'Content for Test News'
+        }
     def test_create_news_view_get(self):
         response = self.client.get(reverse('add_news'))
         self.assertEqual(response.status_code, 200, 'Create news view are not reachable')
@@ -91,15 +96,22 @@ class CreateNewsViewTest(TestCase):
         form = response.context['form']
         self.assertFalse(form.is_bound, 'Form should be unbound(empty) for creation')
     def test_create_news_view_post_valid_data(self):
-        data = {
-            'title': 'Title for Test News',
-            'category': self.category_science.id,
-            'content': 'Content for Test News'
-        }
-        response_create_news = self.client.post(reverse('add_news'), data=data)
-        self.assertEqual(response_create_news.status_code, 302, 'News was not created') 
+        response_create_news = self.client.post(reverse('add_news'), data=self.create_news_data)
+        self.assertEqual(response_create_news.status_code, 302, 'Valid News was not created') 
         self.assertEqual(response_create_news.url, '/news/1/', 'Created News has wrong url')
         response_get_news = self.client.get('/news/1/')
         self.assertEqual(response_get_news.status_code, 200, 'Created News is unreachable')
     def test_create_news_view_post_invalid_data(self):
-        pass #todo
+        required_fields = ['title', 'category']
+        for field in required_fields:
+            create_news_data_copy = self.create_news_data.copy()
+            del create_news_data_copy[field]
+            response_create_news = self.client.post(reverse('add_news'), data=create_news_data_copy)
+            self.assertEqual(response_create_news.status_code, 200, f'Invalid News was created with missing {field}')
+            self.assertIn(field , response_create_news.context['form'].errors, 'Invalid creation does not have wrong field in errors')
+        none_required_fields = ['content']
+        for field in none_required_fields:
+            create_news_data_copy = self.create_news_data.copy()
+            del create_news_data_copy[field]
+            response_create_news = self.client.post(reverse('add_news'), data=create_news_data_copy)
+            self.assertEqual(response_create_news.status_code, 302, f'News was not created with missing none_required field {field}')
