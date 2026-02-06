@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, Group
+from news.models import News
 
 def admin_user(username='admin', password='AdminPass123!'):
     "Helper for create admin user"
@@ -30,3 +31,14 @@ def create_editor_user(username='editor', password='EditorPass123!'):
     editor_group, _ = Group.objects.get_or_create(name='Редакторы')
     user.groups.add(editor_group)
     return user, password
+
+def create_news(category, **kwargs):
+    "Helper for create news"
+    default_data = {
+        'title': 'Title for Test News',
+        'content': 'Content for Test News',
+        'category': category,
+        'is_published': True
+    }
+    default_data.update(kwargs)
+    return News.objects.create(**default_data)

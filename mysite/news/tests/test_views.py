@@ -1,7 +1,7 @@
 from django.test import TestCase
 from news.models import News, Category
 from django.urls import reverse
-from news.tests.test_base import create_editor_user
+from news.tests.test_base import create_editor_user, create_news
 
 class NewsViewsTest(TestCase):
     "Tests for News views in app News"
@@ -115,3 +115,16 @@ class CreateNewsViewTest(TestCase):
             del create_news_data_copy[field]
             response_create_news = self.client.post(reverse('add_news'), data=create_news_data_copy)
             self.assertEqual(response_create_news.status_code, 302, f'News was not created with missing none_required field {field}')
+
+class EditNewsViewTest(TestCase):
+    "Tests for Edit News View in app News"
+    def setUp(self):
+        self.category = Category.objects.create(title='Science')
+        self.editor_user, self.editor_password = create_editor_user()
+        self.created_news = create_news(self.category)
+        self.client.login(username=self.editor_user.username, password=self.editor_password)
+    def test_created_news_view_get(self):
+        response = self.client.get(reverse('edit_news', kwargs={'pk': self.created_news.pk}))
+        self.assertEqual(response.status_code, 200, 'Edit News View are not reachable')
+        form = response.context['form']
+        self.assertFalse(form.is_bound, 'Form edition news should be unbound(empty) for edition')
