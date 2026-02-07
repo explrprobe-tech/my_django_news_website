@@ -119,12 +119,26 @@ class CreateNewsViewTest(TestCase):
 class EditNewsViewTest(TestCase):
     "Tests for Edit News View in app News"
     def setUp(self):
-        self.category = Category.objects.create(title='Science')
+        self.category_science = Category.objects.create(title='Science')
+        self.category_biology = Category.objects.create(title='Biology')
         self.editor_user, self.editor_password = create_editor_user()
-        self.created_news = create_news(self.category)
+        self.created_news = create_news(self.category_science)
         self.client.login(username=self.editor_user.username, password=self.editor_password)
     def test_created_news_view_get(self):
         response = self.client.get(reverse('edit_news', kwargs={'pk': self.created_news.pk}))
         self.assertEqual(response.status_code, 200, 'Edit News View are not reachable')
         form = response.context['form']
         self.assertFalse(form.is_bound, 'Form edition news should be unbound(empty) for edition')
+    def test_created_news_view_post_valid(self):
+        update_data = {
+            'title': 'Title after change',
+            'content': 'Content after change',
+            'category': self.category_biology.pk
+        }
+        response = self.client.post(reverse('edit_news', kwargs={'pk': self.created_news.pk}), data=update_data)
+        self.assertEqual(response.status_code, 302, 'Created News was not changed')
+        self.assertEqual(response.url, '/news/1/', 'Created user was not redirected to news page after successful change')
+        self.created_news.refresh_from_db()
+        self.assertEqual(self.created_news.title, 'Title after change', 'Title was not changed')
+        self.assertEqual(self.created_news.content, 'Content after change', 'Content was not changed')
+        self.assertEqual(self.created_news.category, self.category_biology, 'Category was not changed')
