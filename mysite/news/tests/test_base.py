@@ -32,13 +32,13 @@ def create_editor_user(username='editor', password='EditorPass123!'):
     user.groups.add(editor_group)
     return user, password
 
-def create_news(category, **kwargs):
-    "Helper for create news"
-    default_data = {
-        'title': 'Title for Test News',
-        'content': 'Content for Test News',
-        'category': category,
-        'is_published': True
-    }
-    default_data.update(kwargs)
-    return News.objects.create(**default_data)
+def with_fresh_news(func):
+    "Decorator for creating fresh news"
+    def wrapper(self, *args, **kwargs):
+        self.created_news = News.objects.create(
+            title='Title for test news',
+            content='Content for test news',
+            category=self.category_science
+        )
+        return func(self, *args, **kwargs)
+    return wrapper
