@@ -16,7 +16,7 @@ from .forms import NewsForm, RegisterForm
 
 # Проверка что пользователь в группе "Администраторы"
 def is_admin(user):
-    return user.groups.filter(name='Администраторы').exists()
+    return user.is_superuser or user.groups.filter(name='Администраторы').exists()
 
 # Проверка что пользователь в группе "Редакторы" или "Администраторы"
 def is_editor_or_admin(user):
@@ -28,7 +28,7 @@ def home(request):
 def admin_required(view_func):
     "Custom decorator that returns 403 for non-admins"
     def wrapper(request, *args, **kwargs):
-        if not is_admin(request.user):
+        if not is_editor_or_admin(request.user):
             raise PermissionDenied
         return view_func(request, *args, **kwargs)
     return wrapper

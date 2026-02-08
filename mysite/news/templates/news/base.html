@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Новостной сайт{% endblock %}</title>
+
+    <!-- Base styles -->
     <style>
         * {
             margin: 0;
@@ -801,6 +803,9 @@
             );
         }
     </style>
+
+    <!-- Extra CSS block -->
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <header class="header">
@@ -823,7 +828,7 @@
                             </span>
                             
                             <!-- Админка только для администраторов -->
-                            {% if user.groups.filter.name == 'Администраторы' %}
+                            {% if user.is_superuser or user.groups.filter.name == 'Администраторы' or user.groups.filter.name == 'Редакторы' %}
                                 <a href="{% url 'admin:index' %}">⚙️ Админка</a>
                                 <a href="{% url 'secret_page' %}">🔒 Секретная страница</a>
                             {% endif %}
@@ -858,8 +863,7 @@
     <main class="main-content">
         <div class="container">
             <!-- СООБЩЕНИЯ -->            
-            {% block content %}
-            {% endblock %}
+            {% block content %}{% endblock %}
         </div>
     </main>
 
@@ -868,7 +872,11 @@
             <p>&copy; 2024 Новостной сайт. Все права защищены.</p>
         </div>
     </footer>
-        <!-- ВСПЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ -->
+
+    <!-- Extra JS block -->
+    {% block extra_js %}{% endblock %}
+
+    <!-- ВСПЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ -->
     <div class="notifications-container">
         {% for message in messages %}
             <div class="notification notification-{{ message.tags }}">
