@@ -98,7 +98,7 @@ class ViewNews(DetailView):
     context_object_name = 'news_item'
     template_name = 'news/news_details.html'
     
-class CreateNews(LoginRequiredMixin, CreateView, UserPassesTestMixin):
+class CreateNews(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     login_url = 'accounts/login'
