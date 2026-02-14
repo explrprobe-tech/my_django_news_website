@@ -611,6 +611,30 @@
                 padding: 20px;
                 border-radius: 30px;
         }
+
+        .page-news {
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            
+            /* ТОНКАЯ БЕЛАЯ ОБВОДКА */
+            text-shadow: 
+                1.5px 1.5px 2px rgba(0, 0, 0, 0.8),
+                -1px -1px 0 rgba(255, 255, 255, 0.3),
+                1px -1px 0 rgba(255, 255, 255, 0.3),
+                -1px 1px 0 rgba(255, 255, 255, 0.3),
+                1px 1px 0 rgba(255, 255, 255, 0.3),
+                
+                /* Дополнительная глубина */
+                0 0 20px rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(255, 255, 255, 0.05);
+            
+            position: relative;
+            z-index: 2;
+            letter-spacing: 0.5px; /* Увеличиваем межбуквенное расстояние */
+        }
         
         .add-news-btn {
             background: #5c7261;
@@ -672,136 +696,7 @@
             }
         }
 
-        .welcome-message {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 10px 40px;
-            border-radius: 24px;
-            position: relative;
-            overflow: hidden;
-            
-            /* ОСНОВНОЙ СТЕКЛЯННЫЙ ФОН */
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 50%,
-                rgba(255, 255, 255, 0.025) 100%
-            );
-            
-            /* СТЕКЛЯННАЯ РАМКА */
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-top: 1px solid rgba(255, 255, 255, 0.6);
-            border-left: 1px solid rgba(255, 255, 255, 0.6);
-            
-            /* ТЕНИ ДЛЯ ОБЪЕМА */
-            box-shadow:
-                /* Внешняя тень */
-                0 15px 35px rgba(0, 0, 0, 0.4),
-                /* Внутреннее свечение */
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-                /* Боковые блики */
-                inset 1px 0 0 rgba(255, 255, 255, 0.2),
-                inset -1px 0 0 rgba(255, 255, 255, 0.2);
-        }
-
-        /* БЛЕСТЯЩИЕ ПЕРЕЛИВЫ ПОВЕРХ СТЕКЛА */
-        .welcome-message::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60%;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.3) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            border-radius: 24px 24px 60% 60%;
-            pointer-events: none;
-        }
-
-        /* БОКОВЫЕ БЛИКИ */
-        .welcome-message::after {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            right: 10%;
-            bottom: 10%;
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 100%
-            );
-            border-radius: 15px;
-            pointer-events: none;
-        }
-
-        /* ТЕКСТ ДЛЯ СТЕКЛА - УТОНЧЕННАЯ ОБВОДКА */
-        .welcome-message h1 {
-            color: white;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            
-            /* ТОНКАЯ БЕЛАЯ ОБВОДКА */
-            text-shadow: 
-                1px 1px 1.5px rgba(0, 0, 0, 0.8),
-                -1px -1px 0 rgba(255, 255, 255, 0.3),
-                1px -1px 0 rgba(255, 255, 255, 0.3),
-                -1px 1px 0 rgba(255, 255, 255, 0.3),
-                1px 1px 0 rgba(255, 255, 255, 0.3),
-                
-                /* Дополнительная глубина */
-                0 0 20px rgba(255, 255, 255, 0.1),
-                0 0 40px rgba(255, 255, 255, 0.05);
-            
-            position: relative;
-            z-index: 2;
-            letter-spacing: 0.5px; /* Увеличиваем межбуквенное расстояние */
-        }
-
-        .welcome-message p {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 1.2rem;
-            
-            /* БОЛЕЕ ТОНКАЯ ОБВОДКА ДЛЯ ПОДЗАГОЛОВКА */
-            text-shadow: 
-                1px 1px 2px rgba(0, 0, 0, 1),
-                -1px -1px 0 rgba(255, 255, 255, 0.3),
-                1px -1px 0 rgba(255, 255, 255, 0.3),
-                -1px 1px 0 rgba(255, 255, 255, 0.3),
-                1px 1px 0 rgba(255, 255, 255, 0.3);
-            
-            position: relative;
-            z-index: 2;
-            letter-spacing: 0.3px;
-        }
-
-        /* ЭФФЕКТ ПРИ НАВЕДЕНИИ */
-        .welcome-message:hover {
-            transform: translateY(-5px);
-            box-shadow:
-                0 20px 45px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.5),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-                inset 1px 0 0 rgba(255, 255, 255, 0.3),
-                inset -1px 0 0 rgba(255, 255, 255, 0.3);
-            transition: all 0.4s ease;
-        }
-
-        .welcome-message:hover::before {
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.4) 0%,
-                rgba(255, 255, 255, 0.15) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
-        }
+        
     </style>
 
     <!-- Extra CSS block -->
