@@ -40,6 +40,14 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig'
 ]
 
+SPACE_API_CONFIG = {
+    'SUN_SPOTS': 'https://services.swpc.noaa.gov/json/sunspot_report.json',
+    'SOLAR_WIND': 'https://services.swpc.noaa.gov/text/rtsw/data.txt',
+    'SOLAR_FLARES': 'https://services.swpc.noaa.gov/json/goes/primary/xray-flares-latest.json',
+    'MARS_WEATHER': 'https://mars.nasa.gov/rss/api/?feed=weather&category=msl&feedtype=json',
+    'ISS_POSITION': 'http://api.open-notify.org/iss-now.json',
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

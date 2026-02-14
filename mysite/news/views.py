@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Group
+import requests
 
 
 from .models import News, Category
@@ -33,10 +34,39 @@ def admin_required(view_func):
         return view_func(request, *args, **kwargs)
     return wrapper
 
+def get_data(url) -> dict:
+    """Universal function to fetch JSON data"""
+    try:
+        r = requests.get(url, timeout=5)
+        return r.json()[0] 
+    except:
+        return {} 
+
 @login_required
 @admin_required
 def secret_page(request):
-    return render(request, 'news/secret_page.html')
+    # Get solar radio flux data from NOAA API (first element only)
+    sun_data = get_data('https://services.swpc.noaa.gov/json/solar-radio-flux.json')
+    
+    # Get timestamp from the data
+    timestamp = sun_data.get('time_tag', 'Unknown')
+    station = sun_data.get('common_name', 'Unknown')
+    
+    # Extract frequency details for display
+    frequencies = {}
+    if 'details' in sun_data:
+        for item in sun_data['details']:
+            freq = item.get('frequency', '')
+            flux = item.get('flux', '')
+            quality = item.get('observed_quality', '')
+            frequencies[freq] = {'flux': flux, 'quality': quality}
+    
+    return render(request, 'news/secret_page.html', {
+        'sun_data': sun_data,
+        'frequencies': frequencies,
+        'timestamp': timestamp,
+        'station': station
+    })
 
 def register(request):
     if request.method == 'POST':
