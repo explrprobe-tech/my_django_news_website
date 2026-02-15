@@ -382,7 +382,7 @@
                     <option value="">Выберите категорию...</option>
                     {% for category in categories %}
                     <option value="{{ category.id }}" {% if form.category.value == category.id %}selected{% endif %}>
-                        {{ category.name }}
+                        {{ category.title }}
                     </option>
                     {% endfor %}
                 </select>

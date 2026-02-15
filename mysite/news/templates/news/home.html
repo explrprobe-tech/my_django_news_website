@@ -17,16 +17,16 @@
     {% if latest_news %}
         {% for news in latest_news %}
         <div class="news-card">
-            <a href="{% url 'news_detail' news.id %}" class="news-title">{{ news.title }}</a>
+            <a href="{% url 'view_news' news.id %}" class="news-title">{{ news.title }}</a>
             <div class="news-meta">
                 <span>📅 {{ news.created_at|date:"d.m.Y" }}</span>
                 {% if news.category %}
-                <a href="{% url 'category_news' news.category.id %}" class="category-badge">{{ news.category.name }}</a>
+                <a href="{% url 'category' news.category.id %}" class="category-badge">{{ news.category.name }}</a>
                 {% endif %}
                 <span>👁️ {{ news.views_count }} просмотров</span>
             </div>
             <p class="news-content">{{ news.content|truncatewords:30 }}</p>
-            <a href="{% url 'news_detail' news.id %}" class="read-more">Читать далее →</a>
+            <a href="{% url 'view_news' news.id %}" class="read-more">Читать далее →</a>
         </div>
         {% endfor %}
     {% else %}

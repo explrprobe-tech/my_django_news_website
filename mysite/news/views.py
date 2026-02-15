@@ -24,7 +24,10 @@ def is_editor_or_admin(user):
     return user.groups.filter(name__in=['Редакторы', 'Администраторы']).exists()
 
 def home(request):
-    return render(request, 'news/home.html')
+    latest_news = News.objects.all().order_by('-created_at')[:3]
+    return render(request, 'news/home.html', {
+        'latest_news': latest_news
+    })
 
 def admin_required(view_func):
     "Custom decorator that returns 403 for non-admins"
@@ -99,7 +102,7 @@ def custom_logout(request):
 class HomeNews(ListView):
     model = News
     template_name = 'news/home_news_list.html'
-    context_object_name = 'news'
+    context_object_name = 'latest_news'
     
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -139,6 +142,11 @@ class CreateNews(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
 class EditNews(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = News
