@@ -24,7 +24,7 @@ def is_editor_or_admin(user):
     return user.groups.filter(name__in=['Редакторы', 'Администраторы']).exists()
 
 def home(request):
-    latest_news = News.objects.all().order_by('-created_at')[:3]
+    latest_news = News.objects.all().order_by('-created_at').filter(is_published=True)[:3]
     return render(request, 'news/home.html', {
         'latest_news': latest_news
     })
