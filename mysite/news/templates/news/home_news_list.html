@@ -20,8 +20,9 @@
                 <div class="news-meta">
                     <span>📅 {{ item.created_at|date:"d.m.Y" }}</span>
                     {% if item.category %}
-                        <a href="{% url 'category' item.category.pk %}" class="category-badge">{{ item.category.name }}</a>
+                        <a href="{% url 'category' item.category.pk %}" class="category-badge">{{ item.category.title }}</a>
                     {% endif %}
+                    <span>👁️ {{ news.views_count }} просмотров</span>
                 </div>
                 <p class="news-content">
                     {{ item.content|truncatewords:30 }}

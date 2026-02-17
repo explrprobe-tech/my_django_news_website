@@ -472,6 +472,10 @@
             z-index: 2;
         }
 
+        .news-card-content {
+            flex: 1 0 auto;
+        }
+
         /* Стили для текста с обводкой */
         .news-title {
             color: white; /* Белый текст */
@@ -483,7 +487,7 @@
             /* БЕЛАЯ ОБВОДКА */
             text-shadow: 
                 0.5px 0.5px 4px rgba(0,0,0,0.8),    /* Тень для контраста */
-                -0.5px -0.5px 0  rgb(54, 50, 50),              /* Белая обводка */
+                -0.5px -0.5px 0  rgb(54, 50, 50),              
                 0.5px -0.5px 0 rgb(54, 50, 50),
                 -0.5px 0.5px 0  rgb(54, 50, 50),
                 0.5px 0.5px 0 rgb(54, 50, 50);
@@ -499,10 +503,20 @@
                 1px 1px 0 white;
         }
 
+        .news-title::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: white;
+            opacity: 0.7;  /* Slight transparency */
+        }
+
         .news-meta {
             color: rgba(255, 255, 255, 0.9); /* Белый с прозрачностью */
             font-size: 0.9rem;
-            margin-bottom: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -510,10 +524,10 @@
             /* Обводка для мета-информации */
             text-shadow: 
                 1px 1px 1px rgba(0,0,0,0.7),
-                -1px -1px 0 rgba(255,255,255,0.5),
-                1px -1px 0 rgba(255,255,255,0.5),
-                -1px 1px 0 rgba(255,255,255,0.5),
-                1px 1px 0 rgba(255,255,255,0.5);
+                -0.7px -0.7px 0 rgba(255,255,255,0.5),
+                0.7px -0.7px 0 rgba(255,255,255,0.5),
+                -0.7px 0.7px 0 rgba(255,255,255,0.5),
+                0.7px 0.7px 0 rgba(255,255,255,0.5);
         }
 
         .news-content {
@@ -523,10 +537,10 @@
             /* Обводка для контента */
             text-shadow: 
                 0.5px 0.5px 0.5px rgba(0,0,0,0.6),
-                -0.5px -0.5px 0 rgba(255,255,255,0.3),
-                0.5px -0.5px 0 rgba(255,255,255,0.3),
-                -0.5px 0.5px 0 rgba(255,255,255,0.3),
-                0.5px 0.5px 0 rgba(255,255,255,0.3);
+                -0.5px -0.5px 0 rgba(0, 0, 0, 0.3),
+                0.5px -0.5px 0 rgba(0, 0, 0, 0.3),
+                -0.5px 0.5px 0 rgba(0, 0, 0, 0.3),
+                0.5px 0.5px 0 rgba(0, 0, 0, 0.3);
         }
 
         .read-more {
@@ -538,11 +552,11 @@
             
             /* Обводка для кнопки */
             text-shadow: 
-                1px 1px 2px rgba(0,0,0,0.8),
-                -1px -1px 0 white,
-                1px -1px 0 white,
-                -1px 1px 0 white,
-                1px 1px 0 white;
+                0.5px 0.5px 0.5px rgba(0,0,0,0.6),
+                -0.5px -0.5px 0 rgba(0, 0, 0, 0.3),
+                0.5px -0.5px 0 rgba(0, 0, 0, 0.3),
+                -0.5px 0.5px 0 rgba(0, 0, 0, 0.3),
+                0.5px 0.5px 0 rgba(0, 0, 0, 0.3);
         }
 
         .read-more:hover {
