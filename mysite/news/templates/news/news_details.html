@@ -2,19 +2,391 @@
 
 {% block title %}{{ news_item.title }} - Новостной сайт{% endblock %}
 
+{% block extra_css %}
+<style>
+    .news-detail-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        animation: fadeInUp 0.8s ease;
+    }
+    
+    /* Карточка новости с красивым оформлением */
+    .news-detail-content {
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 40px;
+        padding: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid rgba(255, 255, 255, 0.5);
+        border-left: 2px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 
+            0 30px 50px rgba(0, 0, 0, 0.3),
+            inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+        animation: slideInLeft 0.8s ease;
+        
+    }
+    
+    /* Анимированный фон */
+    .news-detail-content::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(16, 16, 16, 0.2) 10%, transparent 50%);
+        animation: rotate 30s linear infinite;
+        z-index: 0;
+    }
+    
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Изображение новости (FIXED) */
+    .news-detail-image {
+        width: 100%;
+        max-height: 500px;
+        object-fit: cover;
+        border-radius: 30px;
+        margin-bottom: 30px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        transition: all 0.5s ease;
+        position: relative;
+        z-index: 1;
+        animation: zoomIn 0.8s ease;
+    }
+    
+    .news-detail-image:hover {
+        transform: scale(1.02);
+        box-shadow: 0 30px 40px rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 170, 0, 0.5);
+    }
+    
+    /* Заголовок новости */
+    .news-detail-title {
+        color: white;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        font-weight: 800;
+        text-shadow: 
+            2px 2px 4px rgba(0, 0, 0, 0.8),
+            -1px -1px 0 rgba(255, 255, 255, 0.3),
+            1px -1px 0 rgba(255, 255, 255, 0.3),
+            -1px 1px 0 rgba(255, 255, 255, 0.3),
+            1px 1px 0 rgba(255, 255, 255, 0.3);
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+        animation: fadeInDown 0.8s ease;
+        border-bottom: 2px solid rgba(255, 170, 0, 0.5);
+        padding-bottom: 20px;
+    }
+    
+    /* Мета-информация */
+    .news-detail-meta {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+        padding: 15px 20px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        z-index: 1;
+        animation: fadeIn 1s ease;
+    }
+    
+    .meta-item {
+        color: white;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        transition: transform 0.3s ease;
+    }
+    
+    .meta-item:hover {
+        transform: translateY(-2px);
+        color: #ffaa00;
+    }
+    
+    /* Категория */
+    .category-badge {
+        background: rgba(102, 126, 234, 0.3);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .category-badge:hover {
+        background: rgba(102, 126, 234, 0.8);
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Текст новости */
+    .news-detail-text {
+        color: rgb(255, 255, 255);
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 1s ease;
+        
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 40px;
+
+        text-shadow: 
+            1px 1px 0px rgba(0, 0, 0, 0.3),
+            -0.5px -0.5px 0 rgba(255, 255, 255, 0.3),
+            0.5px -0.5px 0 rgba(255, 255, 255, 0.3),
+            -0.5px 0.5px 0 rgba(255, 255, 255, 0.3),
+            0.5px 0.5px 0 rgba(255, 255, 255, 0.3);
+    }
+    
+    .news-detail-text p {
+        margin-bottom: 20px;
+        margin-top: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+    
+    .news-detail-text h2, .news-detail-text h3 {
+        color: #ffaa00;
+        margin: 30px 0 15px;
+    }
+    
+    .news-detail-text ul, .news-detail-text ol {
+        margin: 15px 0 15px 30px;
+    }
+    
+    .news-detail-text li {
+        margin-bottom: 8px;
+    }
+    
+    .news-detail-text blockquote {
+        border-left: 4px solid #ffaa00;
+        padding: 15px 25px;
+        background: rgba(255, 170, 0, 0.1);
+        border-radius: 10px;
+        font-style: italic;
+        margin: 20px 0;
+    }
+    
+    /* Действия */
+    .news-detail-actions {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 40px;
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 1.2s ease;
+    }
+    
+    .back-button {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.3));
+        color: white;
+        text-decoration: none;
+        padding: 15px 40px;
+        border-radius: 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+
+        
+        text-shadow: 
+            1px 1px 0px rgba(0, 0, 0, 0.8),
+            -0.5px -0.5px 0 rgba(255, 255, 255, 0.3),
+            0.5px -0.5px 0 rgba(255, 255, 255, 0.3),
+            -0.5px 0.5px 0 rgba(255, 255, 255, 0.3),
+            0.5px 0.5px 0 rgba(255, 255, 255, 0.3);
+    }
+    
+    .back-button::before {
+        content: '←';
+        position: absolute;
+        left: -30px;
+        transition: left 0.3s ease;
+        font-size: 1.5rem;
+    }
+    
+    .back-button:hover {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.8);
+        padding-left: 50px;
+    }
+    
+    .back-button:hover::before {
+        left: 20px;
+    }
+    
+    /* Поделиться */
+    .share-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin: 30px 0;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .share-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.5);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+    }
+    
+    .share-btn:hover {
+        transform: translateY(-5px) rotate(360deg);
+        background: rgba(255, 255, 255, 0.3);
+        border-color: #ffaa00;
+        color: #ffaa00;
+    }
+    
+    /* Анимации */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .news-detail-content {
+            padding: 25px;
+        }
+        
+        .news-detail-title {
+            font-size: 2rem;
+        }
+        
+        .news-detail-meta {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .news-detail-actions {
+            flex-direction: column;
+        }
+        
+        .back-button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <article class="news-detail-container">
     <!-- Основной контент новости -->
     <div class="news-detail-content">
+        <!-- ИЗОБРАЖЕНИЕ НОВОСТИ (FIXED) -->
+        {% if news_item.photo %}
+        <div class="news-image-container" style="position: relative; z-index: 1;">
+            <img src="{{ news_item.photo.url }}" alt="{{ news_item.title }}" class="news-detail-image">
+        </div>
+        {% endif %}
+        
         <h1 class="news-detail-title">{{ news_item.title }}</h1>
         
         <!-- Мета-информация (дата, категория, просмотры) -->
         <div class="news-detail-meta">
             <span class="meta-item">📅 {{ news_item.created_at|date:"d.m.Y H:i" }}</span>
             {% if news_item.category %}
-                <a href="{% url 'category' news_item.category.pk %}" class="category-badge">{{ news_item.category.name }}</a>
+                <a href="{% url 'category' news_item.category.pk %}" class="category-badge">
+                    <span>📌</span> {{ news_item.category.title }}
+                </a>
             {% endif %}
-            <span class="meta-item">👁️ {{ news_item.views }} просмотров</span>
+            <span class="meta-item">👁️ {{ news_item.views_count|default:"0" }} просмотров</span>
+            <span class="meta-item">✍️ {{ news_item.author.username|default:"Admin" }}</span>
+        </div>
+        
+        <!-- Кнопки поделиться -->
+        <div class="share-buttons">
+            <a href="#" class="share-btn" title="Поделиться в Facebook">📘</a>
+            <a href="#" class="share-btn" title="Поделиться в Twitter">🐦</a>
+            <a href="#" class="share-btn" title="Поделиться в Telegram">📱</a>
+            <a href="#" class="share-btn" title="Скопировать ссылку">🔗</a>
         </div>
         
         <!-- Содержание новости -->
@@ -25,7 +397,45 @@
         <!-- Кнопка возврата -->
         <div class="news-detail-actions">
             <a href="{% url 'news_list' %}" class="back-button">← Назад к списку новостей</a>
+            {% if user.is_authenticated and user == news_item.author or user.groups.filter.name == 'Редакторы' or user.groups.filter.name == 'Администраторы' %}
+            <a href="{% url 'edit_news' news_item.id %}" class="back-button" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 87, 34, 0.3));">✏️ Редактировать</a>
+            {% endif %}
         </div>
     </div>
 </article>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Анимация появления элементов
+    const elements = document.querySelectorAll('.news-detail-content > *');
+    elements.forEach((el, index) => {
+        el.style.animation = `fadeInUp 0.6s ease ${index * 0.1}s both`;
+    });
+    
+    // Копирование ссылки
+    const shareBtn = document.querySelector('.share-btn:last-child');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const originalText = this.textContent;
+                this.textContent = '✓';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
+            });
+        });
+    }
+    
+    // Параллакс эффект для изображения
+    const image = document.querySelector('.news-detail-image');
+    if (image) {
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * 0.3;
+            image.style.transform = `translateY(${rate}px) scale(1.02)`;
+        });
+    }
+});
+</script>
 {% endblock %}
