@@ -52,7 +52,6 @@
         max-height: 500px;
         object-fit: cover;
         border-radius: 30px;
-        margin-bottom: 30px;
         border: 3px solid rgba(255, 255, 255, 0.3);
         box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
         transition: all 0.5s ease;
@@ -360,13 +359,6 @@
 <article class="news-detail-container">
     <!-- Основной контент новости -->
     <div class="news-detail-content">
-        <!-- ИЗОБРАЖЕНИЕ НОВОСТИ (FIXED) -->
-        {% if news_item.photo %}
-        <div class="news-image-container" style="position: relative; z-index: 1;">
-            <img src="{{ news_item.photo.url }}" alt="{{ news_item.title }}" class="news-detail-image">
-        </div>
-        {% endif %}
-        
         <h1 class="news-detail-title">{{ news_item.title }}</h1>
         
         <!-- Мета-информация (дата, категория, просмотры) -->
@@ -380,6 +372,11 @@
             <span class="meta-item">👁️ {{ news_item.views_count|default:"0" }} просмотров</span>
             <span class="meta-item">✍️ {{ news_item.author.username|default:"Admin" }}</span>
         </div>
+
+        <!-- ИЗОБРАЖЕНИЕ НОВОСТИ (FIXED) -->
+        {% if news_item.photo %}
+            <img src="{{ news_item.photo.url }}" alt="{{ news_item.title }}" class="news-detail-image">
+        {% endif %}
         
         <!-- Кнопки поделиться -->
         <div class="share-buttons">

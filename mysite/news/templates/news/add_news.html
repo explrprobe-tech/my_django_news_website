@@ -447,16 +447,16 @@
                     <i>🖼️</i> Изображение (необязательно)
                 </label>
                 <input type="file" 
-                       name="image" 
+                       name="photo" 
                        id="id_image" 
                        class="form-control" 
                        accept="image/*">
                 <div class="hint-text">
                     <i>💡</i> Рекомендуемый размер: 1200x630px. Максимальный размер: 5MB
                 </div>
-                {% if form.image.errors %}
+                {% if form.photo.errors %}
                 <ul class="errorlist">
-                    {% for error in form.image.errors %}
+                    {% for error in form.photo.errors %}
                     <li>{{ error }}</li>
                     {% endfor %}
                 </ul>

@@ -159,3 +159,6 @@ class EditNews(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     
     def get_success_url(self):
         return reverse('view_news', kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        return super().form_valid(form)
