@@ -21,12 +21,25 @@ class News(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Is_publish')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Category')
     short_description = models.TextField(blank=True, verbose_name='Short_description')
+    views_count = models.PositiveIntegerField(default=0, verbose_name='Views count')
+    author = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL,  # If user is deleted, author becomes NULL
+        null=True, 
+        blank=True,
+        verbose_name='Author',
+        related_name='news_articles'  # This allows user.news_articles.all()
+    )
     
     def get_absolute_url(self):
         return reverse(viewname="view_news", kwargs={"pk": self.pk})
     
     def __str__(self):
         return self.title
+    
+    def increment_views(self):
+        self.views_count += 1
+        self.save(update_fields=['views_count'])
     
     class Meta:
         verbose_name = 'New' #Наименование модели в единственному числе

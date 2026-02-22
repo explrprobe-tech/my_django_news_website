@@ -130,6 +130,11 @@ class ViewNews(DetailView):
     model = News
     context_object_name = 'news_item'
     template_name = 'news/news_details.html'
+
+    def get_object(self, queryset=None):
+        news = super().get_object(queryset)
+        news.increment_views()
+        return news
     
 class CreateNews(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     form_class = NewsForm

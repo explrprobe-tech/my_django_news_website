@@ -22,7 +22,7 @@
                     {% if item.category %}
                         <a href="{% url 'category' item.category.pk %}" class="category-badge">{{ item.category.title }}</a>
                     {% endif %}
-                    <span>👁️ {{ news.views_count }} просмотров</span>
+                    <span>👁️ {{ item.views_count }} просмотров</span>
                 </div>
                 <p class="news-content">
                     {{ item.short_description }}
