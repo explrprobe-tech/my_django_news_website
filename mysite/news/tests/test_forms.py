@@ -10,6 +10,7 @@ class NewsFormTest(TestCase):
         self.news_form_data = {
             'title': 'Science',
             'content': 'Content for Science News',
+            'short_description': 'Short description for Science News',
             'category': self.category_science.id,
             'is_published': True
         }
@@ -21,6 +22,7 @@ class NewsFormTest(TestCase):
         self.assertIsInstance(news, News, 'News object by form is not an instance of News class')
         self.assertEqual(news.title, 'Science', 'News object by form has not title')
         self.assertEqual(news.content, 'Content for Science News', 'News object by form has not content')
+        self.assertEqual(news.short_description, 'Short description for Science News', 'News object by form has not short description')
         self.assertEqual(news.category.id, self.category_science.id, 'News object by form has not category')
         self.assertTrue(news.is_published, 'News object by form does not have attribute is_published')
     def test_news_form_missing_required_fields(self):
@@ -32,7 +34,7 @@ class NewsFormTest(TestCase):
             news_valid = NewsForm(data=form_data_copy)
             self.assertFalse(news_valid.is_valid(), f'{field} should be required')
             self.assertIn(field, news_valid.errors, f'News form does not show error for required field - {field}')
-        not_required_fields = ['content', 'is_published']
+        not_required_fields = ['content', 'is_published', 'short_description']
         for field in not_required_fields:
             form_data_copy = self.news_form_data.copy()
             del form_data_copy[field]
@@ -43,6 +45,7 @@ class NewsFormTest(TestCase):
         "Test: form validation with invalid data"
         news_form_data_invalid = {
             'title': '123 Invalid title',
+            'short_description': 'Short description for invalid form',
             'content': 'Content for invalid form',
             'category': self.category_biology.id,
             'is_published': True
