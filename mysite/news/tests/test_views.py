@@ -48,11 +48,11 @@ class NewsViewsTest(TestCase):
         """Test: category returns news"""
         response_category = self.client.get(self.category_science.get_absolute_url())
         self.assertEqual(response_category.status_code, 200, "Category can not be opened")
-        self.assertTemplateUsed(response_category, 'news/home_news_list.html')
+        self.assertTemplateUsed(response_category, 'news/category_news_list.html')
     def test_news_by_category_shows_only_published(self):
         """Test: category show only published news"""
         response_category = self.client.get(self.category_science.get_absolute_url())
-        category_news = response_category.context['news']
+        category_news = response_category.context['latest_news']
         self.assertIn(self.news_science_published, category_news, 'Published news is not in category science')
         self.assertNotIn(self.news_science_unpublished, category_news, 'Unublished news is in category science')
         self.assertNotIn(self.news_biology_published, category_news, 'Biology news is in category science')

@@ -166,3 +166,5 @@ if 'test' in sys.argv:
             'name': ':memory:'
         }
     }
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
