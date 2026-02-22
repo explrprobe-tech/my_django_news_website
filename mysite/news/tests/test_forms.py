@@ -25,6 +25,8 @@ class NewsFormTest(TestCase):
         self.assertEqual(news.short_description, 'Short description for Science News', 'News object by form has not short description')
         self.assertEqual(news.category.id, self.category_science.id, 'News object by form has not category')
         self.assertTrue(news.is_published, 'News object by form does not have attribute is_published')
+        self.assertTrue(news.is_published, 'News object by form does not have attribute is_published')
+        self.assertTrue(news.is_published, 'News object by form does not have attribute is_published')
     def test_news_form_missing_required_fields(self):
         "Test: form shows errors only for missing required fields"
         required_fields = ['title', 'category']

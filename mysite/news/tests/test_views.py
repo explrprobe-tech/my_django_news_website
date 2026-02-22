@@ -11,21 +11,30 @@ class NewsViewsTest(TestCase):
             title = "Published Science News",
             content = "Content for the First news",
             category = self.category_science,
-            is_published = True
+            is_published = True,
+            views_count = 0
         )
         self.news_science_unpublished = News.objects.create(
             title = "Unpublished Science News",
             content = "Content for the Second news",
             category = self.category_science,
-            is_published = False
+            is_published = False,
+            views_count = 0
         )
         self.category_biology = Category.objects.create(title="Biology")
         self.news_biology_published = News.objects.create(
             title = "Published Biology news",
             content = "Content for biology news",
             category = self.category_biology,
-            is_published = True
+            is_published = True,
+            views_count = 0
         )
+    def test_news_detail_view_increments_views(self):
+        initial_news = self.news_science_published.views_count
+        respose = self.client.get(reverse('view_news', kwargs={'pk': self.news_science_published.pk}))
+        self.assertEqual(respose.status_code, 200)
+        self.news_science_published.refresh_from_db()
+        self.assertEqual(self.news_science_published.views_count, initial_news + 1)
     def test_home_news_page_status_code(self):
         """Тест: главная страница загружается"""
         response = self.client.get(reverse('news_list'))
@@ -101,6 +110,8 @@ class CreateNewsViewTest(TestCase):
         self.assertEqual(response_create_news.url, '/news/1/', 'Created News has wrong url')
         response_get_news = self.client.get('/news/1/')
         self.assertEqual(response_get_news.status_code, 200, 'Created News is unreachable')
+        news_from_db = News.objects.get(title='Title for Test News')
+        self.assertEqual(news_from_db.author, self.editor_user)
     def test_create_news_view_post_invalid_data(self):
         required_fields = ['title', 'category']
         for field in required_fields:

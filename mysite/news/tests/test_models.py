@@ -1,17 +1,27 @@
 from django.test import TestCase
 from news.models import News, Category
 from django.urls import reverse
+from news.tests.test_base import create_editor_user
 
 class NewsModelTest(TestCase):
     """Тесты для модели News"""
     def setUp(self):
+        self.user, _ = create_editor_user()
         self.category = Category.objects.create(title="Science")
         self.news_published = News.objects.create(
             title = "Published News",
             content = "Content for the First news",
             category = self.category,
-            is_published = True
+            is_published = True,
+            author = self.user,
+            views_count = 0
         )
+    def test_news_initial_views_count(self):
+        self.assertEqual(self.news_published.views_count, 0)
+    def test_increment_views_method(self):
+        self.news_published.increment_views()
+        self.news_published.refresh_from_db()
+        self.assertEqual(self.news_published.views_count, 1)
     def test_news_creation(self):
         """Test: news were created properly"""
         self.assertIsNotNone(self.news_published.title)
