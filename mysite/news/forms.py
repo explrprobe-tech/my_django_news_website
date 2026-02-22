@@ -12,12 +12,13 @@ class NewsForm(forms.ModelForm):
     class Meta:
         model = News
         #fields = '__all__'
-        fields = ['title', 'content', 'is_published', 'category', 'photo']
+        fields = ['title', 'content', 'is_published', 'category', 'photo', 'short_description']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'category': forms.Select(attrs={'class': 'form-control'}),
             'photo': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'short_description': forms.Textarea(attrs={'class': 'form-comtrol', 'rows': 5})
         }
         
     def clean_title(self):

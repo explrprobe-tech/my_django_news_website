@@ -230,6 +230,35 @@
         margin-right: 10px;
         accent-color: #ff4757;
     }
+
+    .is-published {
+        margin-top: 15px;
+        margin-left: 78%;
+        padding: 6px;
+        background: rgba(71, 255, 77, 0.3);
+        border-radius: 15px;
+        text-shadow: 
+            1px 1px 0px rgba(23, 168, 32, 0.8),
+            -0.5px -0.5px 0 rgba(255, 255, 255, 0.3),
+            0.5px -0.5px 0 rgba(255, 255, 255, 0.3),
+            -0.5px 0.5px 0 rgba(255, 255, 255, 0.3),
+            0.5px 0.5px 0 rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(71, 255, 111, 0.5);
+        display: inline-block;
+    }
+    
+    .is-published label {
+        color: #29671c;
+        cursor: pointer;
+        margin-left: 8px;
+    }
+    
+    .is-published input[type="checkbox"] {
+        width: auto;
+        transform: scale(1.5);
+        margin-right: 10px;
+        accent-color: #328421;
+    }
     
     /* Кнопки действий */
     .form-actions {
@@ -431,6 +460,27 @@
             </label>
             {{ form.category }}
         </div>
+
+        <!-- Краткое описание -->
+            <div class="form-group">
+                <label for="id_short_description">
+                    <i>📋</i> Краткое описание
+                </label>
+                <textarea name="short_description" 
+                          id="id_short_description" 
+                          class="form-control" 
+                          placeholder="Напишите краткое описание новости (2-3 предложения)...">{{ form.short_description.value|default:'' }}</textarea>
+                <div class="hint-text">
+                    <i>💡</i> Это описание будет отображаться в списке новостей
+                </div>
+                {% if form.short_description.errors %}
+                <ul class="errorlist">
+                    {% for error in form.short_description.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
         
         <!-- Текущее изображение (если есть) -->
         {% if news_item.photo %}
@@ -465,6 +515,12 @@
             </label>
             {{ form.content }}
             <div class="char-counter" id="content-counter">0 символов</div>
+        </div>
+
+        <div class="is-published">
+            <label>
+                {{ form.is_published }} Опубликовано
+            </label>
         </div>
         
         <!-- Кнопки -->

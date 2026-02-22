@@ -161,4 +161,9 @@ class EditNews(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse('view_news', kwargs={'pk': self.object.pk})
     
     def form_valid(self, form):
+        if self.request.POST.get('photo-clear'):
+            if self.object.photo:
+                self.object.photo.delete()
+                self.object.photo = None
+                self.object.save()
         return super().form_valid(form)

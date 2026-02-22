@@ -24,7 +24,7 @@
                 <a href="{% url 'category' news.category.id %}" class="category-badge">{{ news.category.title }}</a>
                 {% endif %}
             </div>
-            <p class="news-content">{{ news.content|truncatewords:30 }}</p>
+            <p class="news-content">{{ news.short_description }}</p>
             <a href="{% url 'view_news' news.id %}" class="read-more">Читать далее →</a>
         </div>
         {% endfor %}
