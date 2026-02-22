@@ -1,0 +1,47 @@
+    {% extends "news/base.html" %}
+
+    {% block title %}{{ title }} - Новостной сайт{% endblock %}
+
+    {% block content %}
+    <h1 class="page-title">{{ title }}</h1>
+
+    {% if user.is_authenticated and perms.news.add_news %}
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="{% url 'add_news' %}" class="add-news-btn">✍️ Добавить новость</a>
+        </div>
+    {% endif %}
+
+
+    <div class="news-grid">
+        {% for item in latest_news %}
+        <div class="news-card">
+            <div class="news-card-content">
+                <a href="{% url 'view_news' item.pk %}" class="news-title">{{ item.title }}</a>
+                <div class="news-meta">
+                    <span>📅 {{ item.created_at|date:"d.m.Y" }}</span>
+                    {% if item.category %}
+                        <a href="{% url 'category' item.category.pk %}" class="category-badge">{{ item.category.title }}</a>
+                    {% endif %}
+                    <span>👁️ {{ news.views_count }} просмотров</span>
+                </div>
+                <p class="news-content">
+                    {{ item.content|truncatewords:30 }}
+                </p>
+                
+                <!-- Кнопка чтения внутри карточки -->
+                <a href="{% url 'view_news' item.pk %}" class="read-more">Читать далее →</a>
+            </div>
+            
+            <!-- ОТДЕЛЬНАЯ КНОПКА РЕДАКТИРОВАНИЯ ПОД КАРТОЧКОЙ -->
+            {% if user.is_authenticated and user.is_staff %}
+            <div class="edit-button-container">
+                <a href="{% url 'edit_news' item.pk %}" class="edit-news-btn">
+                    <span class="edit-icon">✏️</span>
+                    Редактировать новость
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
