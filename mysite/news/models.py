@@ -1,4 +1,3 @@
-from tkinter.tix import Tree
 from unicodedata import category
 from django.db import models
 from django.urls import reverse
