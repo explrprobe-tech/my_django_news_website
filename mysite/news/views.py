@@ -41,7 +41,7 @@ def get_data(url) -> dict:
     """Universal function to fetch JSON data"""
     try:
         r = requests.get(url, timeout=5)
-        return r.json()[0] 
+        return r.json()[0]
     except:
         return {} 
 
@@ -56,19 +56,12 @@ def secret_page(request):
     station = sun_data.get('common_name', 'Unknown')
     
     # Extract frequency details for display
-    frequencies = {}
-    if 'details' in sun_data:
-        for item in sun_data['details']:
-            freq = item.get('frequency', '')
-            flux = item.get('flux', '')
-            quality = item.get('observed_quality', '')
-            frequencies[freq] = {'flux': flux, 'quality': quality}
+    frequencies = sun_data.get('details', [])[0]
     
     return render(request, 'news/secret_page.html', {
-        'sun_data': sun_data,
-        'frequencies': frequencies,
+        'station': station,
         'timestamp': timestamp,
-        'station': station
+        'frequencies': frequencies,
     })
 
 def register(request):
