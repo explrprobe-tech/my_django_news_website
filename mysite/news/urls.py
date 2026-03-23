@@ -1,11 +1,14 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views 
+from django.contrib.auth import views as auth_views
 
 from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('category/<int:category_id>/', views.NewsByCategory.as_view(), name='category'),
+    path('category/<int:category_id>/', views.NewsByCategory.as_view(), name='category_id'),
+    path('category/add_category/', views.CreateCategory.as_view(), name='add_category'),
+    path('category/', views.ViewCategories.as_view(), name='categories_list'),
+
     path('news/<int:pk>/', views.ViewNews.as_view(), name='view_news'),
     path('news/add_news/', views.CreateNews.as_view(), name='add_news'),
     path('news/', views.HomeNews.as_view(), name='news_list'),

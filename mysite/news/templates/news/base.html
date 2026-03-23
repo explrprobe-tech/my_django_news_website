@@ -672,7 +672,7 @@
             letter-spacing: 0.5px; /* Увеличиваем межбуквенное расстояние */
         }
         
-        .add-news-btn {
+        .categories-btn {
             background: #5c7261;
             color: white;
             padding: 10px 20px;
@@ -680,6 +680,20 @@
             border-radius: 4px;
             display: inline-block;
             margin-bottom: 20px;
+            transition: background 0.3s ease;
+        }
+        
+        .categories-btn:hover {
+            background: #218838;
+        }
+
+        .add-news-btn {
+            background: #5c7261;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
             transition: background 0.3s ease;
         }
         
@@ -759,9 +773,8 @@
                             </span>
                             
                             <!-- Админка только для администраторов -->
-                            {% if user.is_superuser or user.groups.filter.name == 'Администраторы' or user.groups.filter.name == 'Редакторы' %}
+                            {% if user.is_superuser or user.groups.filter.name == 'Администраторы'%}
                                 <a href="{% url 'admin:index' %}">⚙️ Админка</a>
-                                <a href="{% url 'secret_page' %}">🔒 Секретная страница</a>
                             {% endif %}
                             
                             <!-- Добавление новостей для редакторов и админов -->
@@ -785,7 +798,7 @@
         <div class="container">
             <a href="{% url 'home' %}">🏠 Главная</a>
             <a href="{% url 'news_list' %}">📋 Все новости</a>
-            {% if user.is_authenticated %}
+            {% if user.is_superuser or user.groups.filter.name == 'Администраторы' or user.groups.filter.name == 'Редакторы' %}
                 <a href="{% url 'secret_page' %}">🔒 Секретная страница</a>
             {% endif %}
         </div>

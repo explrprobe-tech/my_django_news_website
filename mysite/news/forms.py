@@ -1,5 +1,5 @@
 from django import forms
-from .models import News
+from .models import News, Category
 import re
 
 from django.core.exceptions import ValidationError
@@ -21,6 +21,26 @@ class NewsForm(forms.ModelForm):
             'short_description': forms.Textarea(attrs={'class': 'form-comtrol', 'rows': 5})
         }
         
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if re.match(r'\d', title):
+            raise ValidationError('Name must not start with a number')
+        return title
+    
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['title']
+        widgets = {
+            'title': forms.TextInput(attrs={ 
+                'class': 'form-control',
+                'placeholder': 'Введите название категории...'
+            })
+        }
+        labels = {
+            'title': 'Название категории'
+        }
+
     def clean_title(self):
         title = self.cleaned_data['title']
         if re.match(r'\d', title):

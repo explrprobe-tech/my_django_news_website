@@ -49,7 +49,7 @@ class Category(models.Model):
     title = models.CharField(max_length=150, db_index=True, verbose_name='Title category')
 
     def get_absolute_url(self):
-        return reverse(viewname="category", kwargs={"category_id": self.pk})
+        return reverse(viewname="category_id", kwargs={"category_id": self.pk})
     
     def __str__(self):
         return self.title

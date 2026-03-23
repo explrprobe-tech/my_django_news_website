@@ -1,12 +1,13 @@
     {% extends "news/base.html" %}
 
-    {% block title %}{{ title }} - Новостной сайт{% endblock %}
+    {% block title %}Все новости{% endblock %}
 
     {% block content %}
-    <h1 class="page-title">{{ title }}</h1>
+    <h1 class="page-title">Все новости</h1>
 
     {% if user.is_authenticated and perms.news.add_news %}
         <div style="text-align: center; margin-bottom: 20px;">
+            <a href="{% url 'categories_list' %}" class="categories-btn">Категории</a>
             <a href="{% url 'add_news' %}" class="add-news-btn">✍️ Добавить новость</a>
         </div>
     {% endif %}
@@ -20,7 +21,7 @@
                 <div class="news-meta">
                     <span>📅 {{ item.created_at|date:"d.m.Y" }}</span>
                     {% if item.category %}
-                        <a href="{% url 'category' item.category.pk %}" class="category-badge">{{ item.category.title }}</a>
+                        <a href="{% url 'category_id' item.category.pk %}" class="category-badge">{{ item.category.title }}</a>
                     {% endif %}
                     <span>👁️ {{ item.views_count }} просмотров</span>
                 </div>

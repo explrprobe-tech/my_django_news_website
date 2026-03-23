@@ -365,7 +365,7 @@
         <div class="news-detail-meta">
             <span class="meta-item">📅 {{ news_item.created_at|date:"d.m.Y H:i" }}</span>
             {% if news_item.category %}
-                <a href="{% url 'category' news_item.category.pk %}" class="category-badge">
+                <a href="{% url 'category_id' news_item.category.pk %}" class="category-badge">
                     <span>📌</span> {{ news_item.category.title }}
                 </a>
             {% endif %}

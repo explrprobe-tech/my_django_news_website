@@ -13,7 +13,7 @@ import requests
 
 
 from .models import News, Category
-from .forms import NewsForm, RegisterForm
+from .forms import NewsForm, RegisterForm, CategoryForm
 
 # Проверка что пользователь в группе "Администраторы"
 def is_admin(user):
@@ -105,11 +105,32 @@ class HomeNews(ListView):
     def get_queryset(self):
         return News.objects.filter(is_published=True)
     
+class ViewCategories(ListView):
+    model = Category
+    template_name = 'news/categories_list.html'
+    context_object_name = 'categories_list'
+
+class CreateCategory(CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'news/add_category.html'
+    login_url = 'accounts/login'
+
+    def form_valid(self, form):
+        """Called when form is valid"""
+        messages.success(self.request, f'Категория "{form.instance.title}" успешно добавлена!')
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        """Called when form is invalid"""
+        messages.error(self.request, 'Пожалуйста, исправьте ошибки в форме.')
+        return super().form_invalid(form)
+
+    
 class NewsByCategory(ListView):
     model = News
     template_name = 'news/category_news_list.html'
     context_object_name = 'latest_news'
-    allow_empty = False 
     
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

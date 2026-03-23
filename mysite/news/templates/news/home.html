@@ -6,6 +6,10 @@
 
 <h2 class="page-title">🔥 Последние новости</h2>
 
+<div style="text-align: center;">
+    <a href="{% url 'categories_list' %}" class="categories-btn">Категории</a>
+</div>
+
 <div style="text-align: center; margin-bottom: 30px;">
     <a href="{% url 'news_list' %}" class="add-news-btn">📰 Читать все новости</a>
     {% if user.is_authenticated %}
@@ -21,7 +25,7 @@
             <div class="news-meta">
                 <span>📅 {{ news.created_at|date:"d.m.Y" }}</span>
                 {% if news.category %}
-                <a href="{% url 'category' news.category.id %}" class="category-badge">{{ news.category.title }}</a>
+                <a href="{% url 'category_id' news.category.id %}" class="category-badge">{{ news.category.title }}</a>
                 {% endif %}
             </div>
             <p class="news-content">{{ news.short_description }}</p>

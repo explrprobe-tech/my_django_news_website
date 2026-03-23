@@ -1,0 +1,34 @@
+    {% extends "news/base.html" %}
+
+    {% block title %} Категории {% endblock %}
+
+    {% block content %}
+    <h1 class="page-title"> Категории </h1>
+
+    <div style="text-align: center; margin-bottom: 30px;">
+    <a href="{% url 'news_list' %}" class="add-news-btn">📰 Читать все новости</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_category' %}" class="add-news-btn">✍️ Добавить категорию</a>
+    {% endif %}
+    </div>
+
+    <div class="news-grid">
+        {% for item in categories_list %}
+        <div class="news-card">
+            <div class="news-card-content">
+                <a href="{% url 'view_news' item.pk %}" class="news-title">{{ item.title }}</a>
+            </div>
+            
+            <!-- ОТДЕЛЬНАЯ КНОПКА РЕДАКТИРОВАНИЯ ПОД КАРТОЧКОЙ -->
+            {% if user.is_authenticated and user.is_staff %}
+            <div class="edit-button-container">
+                <a href="{% url 'category_id' item.pk %}" class="edit-news-btn">
+                    <span class="edit-icon">📰</span>
+                    Читать новости
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
