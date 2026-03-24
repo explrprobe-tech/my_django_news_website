@@ -43,7 +43,7 @@ class NewsModelTest(TestCase):
         """Test: category can return absolute url"""
         category_url = self.category.get_absolute_url()
         self.assertTrue(category_url.startswith('/'), 'Category url should start with /')
-        expected_url = reverse(viewname="category", kwargs={'category_id': self.category.pk})
+        expected_url = reverse(viewname="category_id", kwargs={'category_id': self.category.pk})
         self.assertEqual(category_url, expected_url, 'Category url do not equal to expected')
     def test_category_str_method(self):
         """Test: category displays properly"""
