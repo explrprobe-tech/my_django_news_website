@@ -38,13 +38,21 @@ class NewsModelTest(TestCase):
         published_url = self.news_published.get_absolute_url()
         self.assertTrue(published_url.startswith('/'), 'Published news url should start with /')
         expected_url = reverse('view_news', kwargs={'pk': self.news_published.pk})
-        self.assertEqual(published_url, expected_url, 'Published news url does not match expected url')    
+        self.assertEqual(published_url, expected_url, 'Published news url does not match expected url')
+
+class CategoryModelTest(TestCase):
+    """Tests for category model"""
+    def setUp(self):
+        self.category = Category.objects.create(title="Test category title")
+    def test_category_creation(self):
+        """Tests: category was created properly"""
+        self.assertEqual(self.category.title, 'Test category title')
     def test_category_get_absolute_url(self):
-        """Test: category can return absolute url"""
+        """Tests: category has absolute url"""
         category_url = self.category.get_absolute_url()
-        self.assertTrue(category_url.startswith('/'), 'Category url should start with /')
-        expected_url = reverse(viewname="category_id", kwargs={'category_id': self.category.pk})
-        self.assertEqual(category_url, expected_url, 'Category url do not equal to expected')
+        self.assertTrue(category_url.startswith('/'))
+        expected_url = reverse(viewname='category_id', kwargs={'category_id': self.category.pk})
+        self.assertEqual(category_url, expected_url)
     def test_category_str_method(self):
         """Test: category displays properly"""
         self.assertEqual(str(self.category), self.category.title) 
