@@ -1,6 +1,6 @@
 from django.test import TestCase
 from news.models import News, Category
-from news.forms import NewsForm, RegisterForm
+from news.forms import NewsForm, RegisterForm, CategoryForm
 
 class NewsFormTest(TestCase):
     "Tests for News forms in app News"
@@ -97,3 +97,23 @@ class RegisterFormTest(TestCase):
         self.assertIn('email', register_form_invalid.errors, 'Register form does not check email pattern')
         self.assertIn('password1', register_form_invalid.errors, 'Register form does not check password1 short')
         self.assertIn('password2', register_form_invalid.errors, 'Register form does not check password2 matching to password1')
+
+class CategoryFormTest(TestCase):
+    "Tests for Category form in app News"
+    def setUp(self):
+        self.category_form_data = {
+            'title': 'Test category valid data'
+        }
+    def test_category_form_valid(self):
+        "Test: category form works with valid data"
+        category_form = CategoryForm(data=self.category_form_data)
+        self.assertTrue(category_form.is_valid(), f'Category form should be valid with valid data. Error : {category_form.errors if not category_form.is_valid() else None}')
+        category = category_form.save()
+        self.assertEqual(category.title, 'Test category valid data')
+    def test_category_form_invalid(self):
+        "Test: categorm form doesn't work with invalid data"
+        category_form_invalid_data = {
+            'title': '1Invalid title'
+        }
+        category_form = CategoryForm(data=category_form_invalid_data)
+        self.assertFalse(category_form.is_valid(), f'Category form should be invalid with invalid data')
