@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('category/<int:category_id>/', views.NewsByCategory.as_view(), name='category_id'),
+    path('category/<int:pk>/delete/', views.DeleteCategoryView.as_view(), name='category_delete'),
     path('category/add_category/', views.CreateCategory.as_view(), name='add_category'),
     path('category/', views.ViewCategories.as_view(), name='categories_list'),
 

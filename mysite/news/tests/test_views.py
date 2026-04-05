@@ -1,7 +1,8 @@
 from django.test import TestCase
 from news.models import News, Category
 from django.urls import reverse
-from news.tests.test_base import create_editor_user, with_fresh_news
+from news.tests.test_base import create_editor_user, admin_user, with_fresh_news
+import re
 
 class NewsViewsTest(TestCase):
     "Tests for News views in app News"
@@ -175,3 +176,29 @@ class EditNewsViewTest(TestCase):
             response = self.client.post(reverse('edit_news', kwargs={'pk': self.created_news.pk}), data=update_data_copy)
             self.assertEqual(response.status_code, 302, f'Created news was not edited with valid field {field}')
             
+class CategoryViewTest(TestCase):
+    """Tests for creation category view in app News"""
+    def setUp(self):
+        self.category_science = Category.objects.create(title="Science")
+        self.admin_user, self.admin_password = admin_user()
+        self.client.login(username=self.admin_user, password=self.admin_password)
+    def test_category_view_get(self):
+        response = self.client.get(reverse('add_category'))
+        self.assertEqual(response.status_code, 200, "Category view aren't reachable")
+    def test_category_view_post(self):
+        response_create_category = self.client.post(reverse('add_category'), data={
+            "title": "Test Category Title"
+        })
+        self.assertEqual(response_create_category.status_code, 302, "Category view doesn't let to create Category")
+        response_get_category = self.client.get(response_create_category.url)
+        self.assertEqual(response_get_category.status_code, 200, "Category wasn't created")
+    def test_category_view_delete(self):
+        response_create_category = self.client.post(reverse('add_category'), data={
+            "title": "Test Category Title"
+        })
+        self.assertEqual(response_create_category.status_code, 302, "Category view doesn't let to create Category")
+        response_create_category_id = re.search(r'/category/(\d+)/', response_create_category.url).group(1)
+        response_delete_category = self.client.post(reverse('category_delete', kwargs={
+            "pk": response_create_category_id
+        }))
+        self.assertEqual(response_delete_category.status_code, 302, "Category can't be deleted by admin")

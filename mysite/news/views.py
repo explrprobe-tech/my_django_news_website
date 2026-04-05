@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from django.contrib import messages
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Group
@@ -125,7 +125,15 @@ class CreateCategory(CreateView):
         """Called when form is invalid"""
         messages.error(self.request, 'Пожалуйста, исправьте ошибки в форме.')
         return super().form_invalid(form)
+    
+class DeleteCategoryView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Delete a category (admin only)"""
+    model = Category
+    success_url = reverse_lazy('categories_list')
 
+    def test_func(self):
+        """Only allows admin to delete category"""
+        return self.request.user.is_superuser or self.request.user.groups.filter(name="Администраторы").exists()
     
 class NewsByCategory(ListView):
     model = News
