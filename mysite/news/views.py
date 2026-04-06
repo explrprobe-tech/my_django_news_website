@@ -9,6 +9,8 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Group
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseForbidden
 import requests
 
 
@@ -85,6 +87,18 @@ def register(request):
     
     return render(request, 'news/register.html', {'form': form})
 
+@login_required
+@require_http_methods(["POST"])
+def category_delete(request, pk):
+    """Delete category by API"""
+    if not is_editor_or_admin(request.user):
+        messages.error(request, 'У вас нет прав на удаление категории')
+        return redirect('categories_list')
+    category = get_object_or_404(Category, pk=pk)
+    category.delete()
+    messages.success(request, f'Категория {category.title} успешно удалена')
+    return redirect('categories_list')
+
 
 @require_http_methods(["GET", "POST"])
 def custom_logout(request):
@@ -129,14 +143,6 @@ class CreateCategory(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         messages.error(self.request, 'Пожалуйста, исправьте ошибки в форме.')
         return super().form_invalid(form)
     
-class DeleteCategoryView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """Delete a category (admin only)"""
-    model = Category
-    success_url = reverse_lazy('categories_list')
-
-    def test_func(self):
-        """Only allows admin to delete category"""
-        return is_editor_or_admin(self.request.user)
     
 class NewsByCategory(ListView):
     model = News
