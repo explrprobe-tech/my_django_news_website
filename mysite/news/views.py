@@ -21,7 +21,7 @@ def is_admin(user):
 
 # Проверка что пользователь в группе "Редакторы" или "Администраторы"
 def is_editor_or_admin(user):
-    return user.groups.filter(name__in=['Редакторы', 'Администраторы']).exists()
+    return user.is_superuser or user.groups.filter(name__in=['Редакторы', 'Администраторы']).exists()
 
 def home(request):
     latest_news = News.objects.all().order_by('-created_at').filter(is_published=True)[:3]
@@ -110,11 +110,14 @@ class ViewCategories(ListView):
     template_name = 'news/categories_list.html'
     context_object_name = 'categories_list'
 
-class CreateCategory(CreateView):
+class CreateCategory(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'news/add_category.html'
     login_url = 'accounts/login'
+
+    def test_func(self):
+        return is_editor_or_admin(self.request.user)
 
     def form_valid(self, form):
         """Called when form is valid"""
@@ -133,7 +136,7 @@ class DeleteCategoryView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         """Only allows admin to delete category"""
-        return self.request.user.is_superuser or self.request.user.groups.filter(name="Администраторы").exists()
+        return is_editor_or_admin(self.request.user)
     
 class NewsByCategory(ListView):
     model = News
