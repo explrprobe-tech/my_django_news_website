@@ -66,6 +66,17 @@ class NewsViewsTest(TestCase):
         self.assertIn(self.news_science_published, category_news, 'Published news is not in category science')
         self.assertNotIn(self.news_science_unpublished, category_news, 'Unublished news is in category science')
         self.assertNotIn(self.news_biology_published, category_news, 'Biology news is in category science')
+    def test_news_view_delete(self):
+        """Test: news can be deleted"""
+        test_news = News.objects.create(
+            title = "Test News",
+            content = "Test content for Test News",
+            category = self.category_science,
+            is_published = True,
+            views_count = 0
+        )
+        response_test_news_delition = self.client.post(reverse('news_delete', kwargs={'pk': test_news.pk}))
+        self.assertEqual(response_test_news_delition.status_code, 302, "News can't be deleted")
 
 class RegisterViewTest(TestCase):
     "Tests for Register view in app News"
@@ -193,12 +204,8 @@ class CategoryViewTest(TestCase):
         response_get_category = self.client.get(response_create_category.url)
         self.assertEqual(response_get_category.status_code, 200, "Category wasn't created")
     def test_category_view_delete(self):
-        response_create_category = self.client.post(reverse('add_category'), data={
-            "title": "Test Category Title"
-        })
-        self.assertEqual(response_create_category.status_code, 302, "Category view doesn't let to create Category")
-        response_create_category_id = re.search(r'/category/(\d+)/', response_create_category.url).group(1)
-        response_delete_category = self.client.post(reverse('category_delete', kwargs={
-            "pk": response_create_category_id
+        test_category = Category.objects.create(title = "Test Category")
+        response_category_delition = self.client.post(reverse('category_delete', kwargs={
+            "pk": test_category.pk
         }))
-        self.assertEqual(response_delete_category.status_code, 302, "Category can't be deleted by admin")
+        self.assertEqual(response_category_delition.status_code, 302, "Category can't be deleted by admin")

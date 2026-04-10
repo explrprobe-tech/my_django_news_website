@@ -99,6 +99,17 @@ def category_delete(request, pk):
     messages.success(request, f'Категория {category.title} успешно удалена')
     return redirect('categories_list')
 
+@login_required
+@require_http_methods(["POST"])
+def news_delete(request, pk):
+    """Delete news by API"""
+    if not is_editor_or_admin(request.user):
+        messages.error(request, "У вас нет прав на удаление новости")
+        return redirect('news_list')
+    news = get_object_or_404(News, pk=pk)
+    news.delete()
+    messages.success(request, f'Новость {news.title} успешно удалена')
+    return redirect('news_list')
 
 @require_http_methods(["GET", "POST"])
 def custom_logout(request):
