@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from news.tests.test_base import admin_user, regular_user, create_editor_user, with_fresh_news
-from news.views import Category
+from news.views import Category, News
 
 class AuthTest(TestCase):
     "Tests for auth in app News"
@@ -93,3 +93,33 @@ class AuthTest(TestCase):
         self.client.login(username=self.editor_user, password=self.editor_password)
         editor_user_response = self.client.post(reverse('category_delete', kwargs={'pk': category_test.pk}))
         self.assertEqual(editor_user_response.status_code, 302, 'Editor user should have access to delete category')
+    def test_news_deletion_permision(self):
+        category_test = Category.objects.create(title='Test Category')
+        news_test = News.objects.create(
+            title = "Test News",
+            content = "Tect content for Test News",
+            category = category_test,
+            is_published = True,
+            views_count = 0
+        )
+        self.client.logout()
+        annonymous_user_response = self.client.post(reverse('news_delete', kwargs={'pk': news_test.pk}))
+        self.assertEqual(annonymous_user_response.status_code, 302, 'Anonymous user should not have access to delete news')
+        self.client.login(username=self.regular_user, password=self.regular_password)
+        regular_user_response = self.client.post(reverse('news_delete', kwargs={'pk': news_test.pk}))
+        self.assertEqual(regular_user_response.status_code, 302, 'Regular user should not have access to delete news')
+        self.client.logout()
+        self.client.login(username=self.admin_user, password=self.admin_password)
+        admin_user_response = self.client.post(reverse('news_delete', kwargs={'pk': news_test.pk}))
+        self.assertEqual(admin_user_response.status_code, 302, 'Admin user should have access to delete news')
+        self.client.logout()
+        news_test = News.objects.create(
+            title = "Test News",
+            content = "Tect content for Test News",
+            category = category_test,
+            is_published = True,
+            views_count = 0
+        )
+        self.client.login(username=self.editor_user, password=self.editor_password)
+        editor_user_response = self.client.post(reverse('news_delete', kwargs={'pk': news_test.pk}))
+        self.assertEqual(editor_user_response.status_code, 302, 'Editor user should have access to delete news')
