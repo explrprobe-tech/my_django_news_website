@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from news.tests.test_base import admin_user, regular_user, create_editor_user, with_fresh_news
 from news.views import Category, News
+from django.contrib.auth.models import User
 
 class AuthTest(TestCase):
     "Tests for auth in app News"
@@ -123,3 +124,25 @@ class AuthTest(TestCase):
         self.client.login(username=self.editor_user, password=self.editor_password)
         editor_user_response = self.client.post(reverse('news_delete', kwargs={'pk': news_test.pk}))
         self.assertEqual(editor_user_response.status_code, 302, 'Editor user should have access to delete news')
+    def test_user_delete_permision(self):
+        test_user = User.objects.create(
+            username='Test_user',
+            password='Test_user_password',
+            email='Test_user@example.ru'
+            )
+        self.client.logout()
+        response_user_delition_unauthenticated = self.client.post(reverse('user_delete', kwargs={"user_id": test_user.pk}))
+        self.assertEqual(response_user_delition_unauthenticated.status_code, 302, 'Unathenticated user should not have permission to delete users')
+        self.client.logout()
+        self.client.login(username=self.regular_user, password=self.regular_password)
+        response_user_delition_regular = self.client.post(reverse('user_delete', kwargs={"user_id": test_user.pk}))
+        self.assertEqual(response_user_delition_regular.status_code, 403, 'Regular user should not have permission to delete users')
+        self.client.logout()
+        self.client.login(username=self.editor_user, password=self.editor_password)
+        response_user_delition_editor = self.client.post(reverse('user_delete', kwargs={"user_id": test_user.pk}))
+        self.assertEqual(response_user_delition_editor.status_code, 403, 'Editor user should not have permission to delete users')
+        self.client.logout()
+        self.client.login(username=self.admin_user, password=self.admin_password)
+        response_user_delition_admin = self.client.post(reverse('user_delete', kwargs={"user_id": test_user.pk}))
+        self.assertEqual(response_user_delition_admin.status_code, 200, 'Admin user should have permission to delete users')
+        

@@ -18,6 +18,7 @@ urlpatterns = [
     path('secret/', views.secret_page, name='secret_page'),
 
     path('register/', views.register, name='register'),
+    path('user/<int:user_id>/delete/', views.user_delete, name='user_delete'),
     path('login/', auth_views.LoginView.as_view(template_name='news/login.html'), name='login'),
     path('logout/', views.custom_logout, name='logout'),
 

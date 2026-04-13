@@ -2,6 +2,7 @@ from django.test import TestCase
 from news.models import News, Category
 from django.urls import reverse
 from news.tests.test_base import create_editor_user, admin_user, with_fresh_news
+from django.contrib.auth.models import User
 import re
 
 class NewsViewsTest(TestCase):
@@ -138,6 +139,23 @@ class CreateNewsViewTest(TestCase):
             del create_news_data_copy[field]
             response_create_news = self.client.post(reverse('add_news'), data=create_news_data_copy)
             self.assertEqual(response_create_news.status_code, 302, f'News was not created with missing none_required field {field}')
+    def test_user_delete_view_valid_data(self):
+        self.client.logout()
+        username, password = admin_user()
+        self.client.login(username=username, password=password)
+        test_user = User.objects.create(
+            username='Test_user',
+            password='Test_user_password',
+            email='Test_user@example.ru'
+            )
+        response_user_deletion = self.client.post(reverse('user_delete', kwargs={"user_id": test_user.pk}))
+        self.assertEqual(response_user_deletion.status_code, 200, f"View user_delete doesn't let to delete user")
+    def test_user_delete_invalid_data(self):
+        self.client.logout()
+        username, password = admin_user()
+        self.client.login(username=username, password=password)
+        response_user_deletion = self.client.post(reverse('user_delete', kwargs={"user_id": 99999999}))
+        self.assertEqual(response_user_deletion.status_code, 400, f"View user_delete allows to delete not existed user")
 
 class EditNewsViewTest(TestCase):
     "Tests for Edit News View in app News"

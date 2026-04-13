@@ -8,9 +8,9 @@ from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseForbidden
+from django.http import JsonResponse
 import requests
 
 
@@ -98,6 +98,20 @@ def category_delete(request, pk):
     category.delete()
     messages.success(request, f'Категория {category.title} успешно удалена')
     return redirect('categories_list')
+
+@login_required
+@require_http_methods(["POST"])
+def user_delete(request, user_id):
+    """Delete user by API"""
+    try:
+        user = User.objects.get(id=user_id)
+        if not is_admin(request.user):
+            return JsonResponse({'error': 'You do not have permission to delete users'}, status=403)
+        username = user.username
+        user.delete()
+        return JsonResponse({'error': f'User {username} deleted successefully!'}, status=200)
+    except:
+        return JsonResponse({'error': 'User not found'}, status=400)
 
 @login_required
 @require_http_methods(["POST"])
