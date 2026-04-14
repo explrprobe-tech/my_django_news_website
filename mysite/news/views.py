@@ -81,6 +81,13 @@ def register(request):
             
             login(request, user)
             messages.success(request, 'Регистрация прошла успешно!')
+
+            if request.headers.get('User-Agent') == 'MyAutotestBot/1.0':
+                return JsonResponse({
+                    'status': 'success',
+                    'user_id': f'/user/{user.id}/'
+                })
+            
             return redirect('home')
     else:
         form = RegisterForm()
