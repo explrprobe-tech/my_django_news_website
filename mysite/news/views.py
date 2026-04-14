@@ -85,7 +85,7 @@ def register(request):
             if request.headers.get('User-Agent') == 'MyAutotestBot/1.0':
                 return JsonResponse({
                     'status': 'success',
-                    'user_id': f'/user/{user.id}/'
+                    'user_id': f'user/{user.id}/'
                 })
             
             return redirect('home')
