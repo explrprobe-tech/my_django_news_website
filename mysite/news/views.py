@@ -27,8 +27,12 @@ def is_editor_or_admin(user):
 
 def home(request):
     latest_news = News.objects.all().order_by('-created_at').filter(is_published=True)[:3]
+    can_add_news = is_editor_or_admin(request.user)
+    can_see_secret_page = is_editor_or_admin(request.user)
     return render(request, 'news/home.html', {
-        'latest_news': latest_news
+        'latest_news': latest_news,
+        'can_add_news': can_add_news,
+        'can_see_secret_page': can_see_secret_page
     })
 
 def admin_required(view_func):
@@ -155,6 +159,11 @@ class ViewCategories(ListView):
     model = Category
     template_name = 'news/categories_list.html'
     context_object_name = 'categories_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["can_add_category"] = is_editor_or_admin(self.request.user)
+        return context
 
 class CreateCategory(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Category

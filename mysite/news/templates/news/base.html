@@ -798,7 +798,7 @@
         <div class="container">
             <a href="{% url 'home' %}">🏠 Главная</a>
             <a href="{% url 'news_list' %}">📋 Все новости</a>
-            {% if user.is_superuser or user.groups.filter.name == 'Администраторы' or user.groups.filter.name == 'Редакторы' %}
+            {% if can_see_secret_page %}
                 <a href="{% url 'secret_page' %}">🔒 Секретная страница</a>
             {% endif %}
         </div>

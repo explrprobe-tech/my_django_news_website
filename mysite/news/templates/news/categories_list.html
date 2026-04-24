@@ -7,7 +7,7 @@
 
     <div style="text-align: center; margin-bottom: 30px;">
     <a href="{% url 'news_list' %}" class="add-news-btn">📰 Читать все новости</a>
-    {% if user.is_superuser or user.groups.filter.name == 'Администраторы' or user.groups.filter.name == 'Редакторы' %}
+    {% if can_add_category %}
         <a href="{% url 'add_category' %}" class="add-news-btn">✍️ Добавить категорию</a>
     {% endif %}
     </div>
