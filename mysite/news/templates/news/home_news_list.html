@@ -34,7 +34,7 @@
             </div>
             
             <!-- ОТДЕЛЬНАЯ КНОПКА РЕДАКТИРОВАНИЯ ПОД КАРТОЧКОЙ -->
-            {% if user.is_authenticated and user.is_staff %}
+            {% if user.is_authenticated and can_edit_news %}
             <div class="edit-button-container">
                 <a href="{% url 'edit_news' item.pk %}" class="edit-news-btn">
                     <span class="edit-icon">✏️</span>
