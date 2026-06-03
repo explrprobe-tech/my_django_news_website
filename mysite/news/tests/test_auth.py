@@ -16,8 +16,7 @@ class AuthTest(TestCase):
         "Test: secret page are required only by admin"
         self.client.logout()
         anonymous_user_response = self.client.get(reverse('secret_page'))
-        self.assertEqual(anonymous_user_response.status_code, 302, 'Anonymous can open secret_page')
-        self.assertIn('/login/', anonymous_user_response.url)
+        self.assertEqual(anonymous_user_response.status_code, 403, 'Anonymous can open secret_page')
         self.client.logout()
         admin_user_login = self.client.login(username=self.admin_user.username, password=self.admin_password)
         admin_user_response = self.client.get(reverse('secret_page'))
