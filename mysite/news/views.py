@@ -51,7 +51,6 @@ def get_data(url) -> dict:
     except:
         return {} 
 
-@login_required
 @admin_required
 def secret_page(request):
     # Get solar radio flux data from NOAA API (first element only)
