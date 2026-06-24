@@ -30,97 +30,92 @@ A modern news website built with Django, featuring real-time solar data from NOA
 
 ## Project Structure
 
-my_django_news_website/
-├── mysite/                 # Main Django project
-│   ├── settings.py        # Project settings
-│   ├── urls.py            # Main URL configuration
-│   └── wsgi.py            # WSGI entry point
-├── news/                   # News application
-│   ├── models.py          # Database models
-│   ├── views.py           # View functions/classes
-│   ├── forms.py           # Form definitions
-│   ├── admin.py           # Admin panel configuration
-│   ├── urls.py            # App URL configuration
-│   └── templates/         # HTML templates
-│       └── news/          # App templates
-├── tests/                  # Test files
-│   ├── test_models.py
-│   ├── test_views.py
-│   ├── test_forms.py
-│   └── test_auth.py
-├── manage.py
-├── requirements.txt        # Python dependencies
-├── Dockerfile              # Docker configuration
-├── docker-compose.yml      # Docker Compose configuration
-├── .dockerignore          # Files to ignore in Docker
-└── README.md              # This file
+my_django_news_website/<br>
+├── mysite/                 # Main Django project<br>
+│   ├── settings.py        # Project settings<br>
+│   ├── urls.py            # Main URL configuration<br>
+│   └── wsgi.py            # WSGI entry point<br>
+├── news/                   # News application<br>
+│   ├── models.py          # Database models<br>
+│   ├── views.py           # View functions/classes<br>
+│   ├── forms.py           # Form definitions<br>
+│   ├── admin.py           # Admin panel configuration<br>
+│   ├── urls.py            # App URL configuration<br>
+│   └── templates/         # HTML templates<br>
+│       └── news/          # App templates<br>
+├── tests/                  # Test files<br>
+│   ├── test_models.py<br>
+│   ├── test_views.py<br>
+│   ├── test_forms.py<br>
+│   └── test_auth.py<br>
+├── manage.py<br>
+├── requirements.txt        # Python dependencies<br>
+├── Dockerfile              # Docker configuration<br>
+├── docker-compose.yml      # Docker Compose configuration<br>
+├── .dockerignore          # Files to ignore in Docker<br>
+└── README.md              # This file<br>
 
 ## 🚀 Quick Start
 
 ### Option 1: Local Development
 
-# 1. Clone the repository
-git clone https://github.com/explrprobe-tech/my_django_news_website.git
-cd my_django_news_website
+#### 1. Clone the repository
+- git clone https://github.com/explrprobe-tech/my_django_news_website.git
+- cd my_django_news_website
 
-# 2. Create virtual environment
-python -m venv venv
+#### 2. Create virtual environment
+- python -m venv venv
 
-# 3. Activate it
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
+#### 3. Activate it
+#### Windows:
+- venv\Scripts\activate
+#### Mac/Linux:
+- source venv/bin/activate
 
-# 4. Install dependencies
-pip install -r requirements.txt
+#### 4. Install dependencies
+- pip install -r requirements.txt
 
-# 5. Run migrations
-python manage.py migrate
+#### 5. Run migrations
+- python manage.py migrate
 
-# 6. Create superuser
-python manage.py createsuperuser
+#### 6. Create superuser
+- python manage.py createsuperuser
 
-# 7. Run development server
-python manage.py runserver
+#### 7. Run development server
+- python manage.py runserver
 
-Visit http://localhost:8000 🎉
+- Visit http://localhost:8000 🎉
 
 
-#Option 2: Using Docker
+#### Option 2: Using Docker
 
-# 1. Build the Docker image
-docker build -t my-django-news-website .
+#### 1. Build the Docker image
+- docker build -t my-django-news-website .
 
-# 2. Run the container
-docker run -p 8000:8000 -v $(pwd)/db.sqlite3:/app/db.sqlite3 my-django-news-website
+#### 2. Run the container
+- docker run -p 8000:8000 -v $(pwd)/db.sqlite3:/app/db.sqlite3 my-django-news-website
 
-# Or using Docker Compose:
-docker-compose up --build
+#### Or using Docker Compose:
+- docker-compose up --build
 
-#Docker Commands
+# Docker Commands
 
-# Build image
-docker build -t my-django-news-website .
+#### Build image
+- docker build -t my-django-news-website .
 
-# Run container (database inside mysite\db.sqlite3)
-docker run -p 8000:8000 my-django-news-website
+#### Run container (database inside mysite\db.sqlite3)
+- docker run -p 8000:8000 my-django-news-website
 
-# Using docker-compose
-docker-compose up
-docker-compose down
-docker-compose up --build  # Rebuild and start
+#### Using docker-compose
+- docker-compose up
+- docker-compose down
+- docker-compose up --build  # Rebuild and start
 
 
 ### Testing
 
-# Run all tests
-python manage.py test
+#### Run all tests
+- python manage.py test
 
-# Run specific test file
-python manage.py test news.tests.test_models
-
-# Run with coverage
-coverage run manage.py test
-coverage report
-coverage html  # Generate HTML report
+#### Run specific test file
+- python manage.py test news.tests.test_models
